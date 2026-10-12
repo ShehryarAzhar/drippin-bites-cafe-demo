@@ -11,7 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - The restaurant does dine-in, takeaway and delivery, and currently takes orders manually on WhatsApp.
 - Main selling point: the **Cairo Crunch** Egyptian street-food line (Hawawshi, Ful, Tamaya, Chicken Faroge). Everything on the site pushes Cairo Crunch first.
 - Audience: mostly mobile users arriving from Instagram. Design **mobile-first**.
-- Current state: a cleaned `create-next-app` scaffold (spec 01). `app/page.tsx` is a minimal holding page showing only the cafe name; the `metadata` in `app/layout.tsx` is still the stock placeholder; `components/ui/button.tsx` is the only component. Menu data, images and logos are already in place.
+- Current state: a cleaned scaffold with the brand theme applied (specs 01–02). `app/page.tsx` is a branded holding page (pill label, two-colour cafe name, gold rule); the `metadata` in `app/layout.tsx` is still the stock placeholder. Components so far: `components/ui/button.tsx` (restyled: gold pill primary, every size at least 44px) and the brand primitives in `components/brand/` (`BrandHeading`, `GoldRule`, `PillLabel`). Menu data, images and logos are already in place.
 
 ## 2. Tech stack and commands
 
@@ -142,8 +142,10 @@ Starting colour tokens:
 | navy | `#1B2A6B` |
 
 - Set these as the shadcn theme CSS variables in `app/globals.css` (`--background`, `--foreground`, `--primary` = gold, `--card`, etc.) so every component is on-brand. Don't style components one by one with ad-hoc colours.
-- The site is **dark-only**, no light-mode toggle. `globals.css` currently holds the neutral shadcn defaults in `:root` plus a `.dark` block; put the brand values in `:root`.
-- Fonts via `next/font`: a condensed display font for headings (e.g. Bebas Neue or Anton) and a clean sans for body. `app/layout.tsx` currently loads Inter (`--font-sans`), Geist and Geist Mono; replace as needed and keep `--font-heading` in `@theme` pointing at the display font.
+- The site is **dark-only**, no light-mode toggle. The brand values live in `:root` in `globals.css`; there is no `.dark` block. `<html>` carries a static `dark` class so the `dark:` variants in shadcn components apply.
+- Beyond the shadcn variables, `globals.css` defines `gold`, `cream`, `navy`, `brand-red`, `veg` and `card-muted-foreground` as Tailwind colours. `navy`, `brand-red` and `veg` are fills with white text, not text colours. On cream cards use `text-card-muted-foreground` instead of `text-muted-foreground`, and never gold text.
+- Fonts via `next/font`: **Anton** for headings (`--font-display`, mapped to `--font-heading`) and **Figtree** for body (`--font-body`, mapped to `--font-sans`). Anton has one weight; don't set a font weight on headings.
+- Heading sizes come from the `heading-hero`, `heading-section` and `heading-card` utilities in `globals.css`, normally through `BrandHeading`. Don't add `--text-*` theme sizes: `cn` reads an unknown `text-*` class as a colour and merges it away.
 - Text contrast must stay readable: cream on dark, dark text on cream cards.
 
 ## 8a. Design quality bar
@@ -218,7 +220,7 @@ Each feature gets one numbered spec in `.claude/specs/`. Build in this order.
 | # | Spec | Scope | Depends on | Status |
 |---|------|-------|------------|--------|
 | 01 | `01-project-setup` | Remove scaffold leftovers (placeholder page, unused `public/*.svg`, `app/favicon.ico`); add `.env.example` and the `.gitignore` exception; lint and build pass. Scaffold, shadcn init and form libraries already exist. | — | Implemented |
-| 02 | `02-brand-theme` | Brand colour tokens as shadcn CSS variables, dark-only, display + body fonts, shared brand primitives (two-colour heading, gold rule with diamond, pill label). | 01 | Stub |
+| 02 | `02-brand-theme` | Brand colour tokens as shadcn CSS variables, dark-only, display + body fonts, shared brand primitives (two-colour heading, gold rule with diamond, pill label). | 01 | Implemented |
 | 03 | `03-menu-data-helpers` | `types/menu.ts`, typed access to `menu.json`, lookups (size labels, add-on groups, image fallback, tags), TBD-safe values, `Rs. 1,599` formatter. | 01 | Stub |
 | 04 | `04-site-layout` | Root layout, header with logo, footer with TBD-safe contact details, favicon, `metadata`. Logos and `app/icon.svg` already exist. | 02, 03 | Stub |
 | 05 | `05-item-cards` | Product image in a fixed `object-contain` box; display-only item card with name, description, price tag, "NEW" badge, veg indicator. | 02, 03 | Stub |
