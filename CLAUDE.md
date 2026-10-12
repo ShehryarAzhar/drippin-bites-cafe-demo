@@ -11,7 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - The restaurant does dine-in, takeaway and delivery, and currently takes orders manually on WhatsApp.
 - Main selling point: the **Cairo Crunch** Egyptian street-food line (Hawawshi, Ful, Tamaya, Chicken Faroge). Everything on the site pushes Cairo Crunch first.
 - Audience: mostly mobile users arriving from Instagram. Design **mobile-first**.
-- Current state: a cleaned scaffold with the brand theme applied (specs 01–02). `app/page.tsx` is a branded holding page (pill label, two-colour cafe name, gold rule); the `metadata` in `app/layout.tsx` is still the stock placeholder. Components so far: `components/ui/button.tsx` (restyled: gold pill primary, every size at least 44px) and the brand primitives in `components/brand/` (`BrandHeading`, `GoldRule`, `PillLabel`). Menu data, images and logos are already in place.
+- Current state: a cleaned scaffold with the brand theme and menu data helpers in place (specs 01–03). `app/page.tsx` is a branded holding page (pill label, two-colour cafe name, gold rule); the `metadata` in `app/layout.tsx` is still the stock placeholder. Components so far: `components/ui/button.tsx` (restyled: gold pill primary, every size at least 44px) and the brand primitives in `components/brand/` (`BrandHeading`, `GoldRule`, `PillLabel`). Menu access: `types/menu.ts` (all menu types), `lib/menu.ts` (the only import of `menu.json`, plus the lookups) and `lib/format.ts` (`formatPrice`, `tbdSafe`); no page uses them yet. Menu data, images and logos are already in place.
 
 ## 2. Tech stack and commands
 
@@ -221,7 +221,7 @@ Each feature gets one numbered spec in `.claude/specs/`. Build in this order.
 |---|------|-------|------------|--------|
 | 01 | `01-project-setup` | Remove scaffold leftovers (placeholder page, unused `public/*.svg`, `app/favicon.ico`); add `.env.example` and the `.gitignore` exception; lint and build pass. Scaffold, shadcn init and form libraries already exist. | — | Implemented |
 | 02 | `02-brand-theme` | Brand colour tokens as shadcn CSS variables, dark-only, display + body fonts, shared brand primitives (two-colour heading, gold rule with diamond, pill label). | 01 | Implemented |
-| 03 | `03-menu-data-helpers` | `types/menu.ts`, typed access to `menu.json`, lookups (size labels, add-on groups, image fallback, tags), TBD-safe values, `Rs. 1,599` formatter. | 01 | Stub |
+| 03 | `03-menu-data-helpers` | `types/menu.ts`, typed access to `menu.json`, lookups (size labels, add-on groups, image fallback, tags), TBD-safe values, `Rs. 1,599` formatter. | 01 | Implemented |
 | 04 | `04-site-layout` | Root layout, header with logo, footer with TBD-safe contact details, favicon, `metadata`. Logos and `app/icon.svg` already exist. | 02, 03 | Stub |
 | 05 | `05-item-cards` | Product image in a fixed `object-contain` box; display-only item card with name, description, price tag, "NEW" badge, veg indicator. | 02, 03 | Stub |
 | 06 | `06-menu-page` | `/menu` with sticky category bar, Cairo Crunch first and highlighted, all categories with item cards, `sides` / `drinks` sub-groups, a Deals entry in the bar. | 04, 05 | Stub |
@@ -256,5 +256,6 @@ From `menu.json` → `openQuestions`, still unconfirmed by the owners:
 6. Confirm the "Lemonata" spelling in deal 15.
 7. Mushroom Burger and Chmicow Beef Burger have very similar descriptions; confirm.
 8. Address, WhatsApp number, phone, opening hours, delivery areas and fees.
+9. Deal 7: only Afghani Malai Boti has a small premium size — confirm which small premium pizzas exist.
 
 Also assumed in the combo's `_notes`: the Cairo Combo accepts all 8 pockets/wraps at the same Rs.749, and its drink is a Cairo drink.
