@@ -2,27 +2,15 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/* The site is dark-only: <html> always carries the `dark` class so the
+   `dark:` variants in shadcn components apply. There is no light palette. */
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
+  --font-sans: var(--font-body);
+  --font-heading: var(--font-display);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -39,6 +27,12 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-card-muted-foreground: var(--card-muted-foreground);
+  --color-gold: var(--gold);
+  --color-cream: var(--cream);
+  --color-navy: var(--navy);
+  --color-brand-red: var(--brand-red);
+  --color-veg: var(--veg);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -49,82 +43,112 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* Brand colours. Contrast ratios are WCAG 2 figures. */
+  --gold: #eba92b; /* 9.2:1 on background; never as text on cream (1.7:1) */
+  --cream: #f3e6cc; /* 15.3:1 on background */
+  --navy: #1b2a6b; /* fill on cream surfaces only; white on it 13.2:1 */
+  --brand-red: #d3202a; /* fill only; white on it 5.2:1 */
+  --veg: #2a7f3e; /* mark or fill only; white on it 5.0:1, 4.0:1 on cream, 3.8:1 on background */
+
+  --background: #14100c;
+  --foreground: var(--cream);
+  --card: var(--cream);
+  --card-foreground: #14100c;
+  --card-muted-foreground: #5c4f3d; /* secondary text on cream, 6.4:1 */
+  --popover: #1e1811;
+  --popover-foreground: var(--cream);
+  --primary: var(--gold);
+  --primary-foreground: #14100c;
+  --secondary: #2a2118; /* cream on it 12.8:1 */
+  --secondary-foreground: var(--cream);
+  --muted: #221b14;
+  --muted-foreground: #b8aa8e; /* dark surfaces only, 8.3:1 on background */
+  --accent: color-mix(in oklab, var(--gold) 12%, transparent);
+  --accent-foreground: var(--cream);
+  --destructive: #f0705f; /* text on background 6.5:1 */
+  --border: color-mix(in oklab, var(--gold) 18%, transparent);
+  --input: color-mix(in oklab, var(--cream) 18%, transparent);
+  --ring: var(--gold);
+  --radius: 0.875rem;
 }
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+/* Heading scale: hero > section > card. The only place heading sizes live.
+   These are utilities rather than `--text-*` theme keys because `cn` reads an
+   unknown `text-*` class as a colour and would merge it away. */
+@utility heading-hero {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+  /* 13.5vw keeps a 14-character line inside 375px with 24px side padding. */
+  font-size: clamp(2.75rem, 13.5vw, 7rem);
+}
+
+@utility heading-section {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 0.94;
+  letter-spacing: 0.01em;
+  font-size: clamp(2.5rem, 1.9rem + 2.6vw, 4rem);
+}
+
+@utility heading-card {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: 0.015em;
+  font-size: clamp(1.5rem, 1.4rem + 0.4vw, 1.75rem);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
   html {
-    @apply font-sans;
+    @apply bg-background font-sans;
+    color-scheme: dark;
+  }
+  body {
+    @apply text-foreground;
+  }
+  /* Page atmosphere, fixed behind all content: a warm vignette and a faint
+     film grain. Negative z-index keeps both under cards and overlays. */
+  body::before,
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+  body::before {
+    background: radial-gradient(
+      120% 85% at 50% 0%,
+      color-mix(in oklab, var(--gold) 10%, var(--background)) 0%,
+      var(--background) 52%,
+      color-mix(in oklab, black 55%, var(--background)) 100%
+    );
+  }
+  body::after {
+    opacity: 0.07;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 0.93 0 0 0 0 0.8 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 220px 220px;
+  }
+  ::selection {
+    @apply bg-primary text-primary-foreground;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
