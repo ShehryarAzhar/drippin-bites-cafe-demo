@@ -186,6 +186,7 @@ Starting colour tokens:
 
 - Before large changes, briefly state the plan, then implement.
 - After changes, run `npm run lint` and `npm run build` and fix errors.
+- Features are verified with `/verify-spec <number>` (using the read-only `spec-verifier` agent) before they're marked `Implemented`.
 - Don't install new dependencies without saying why.
 - If something in `menu.json` seems wrong or ambiguous, ask instead of guessing.
 
