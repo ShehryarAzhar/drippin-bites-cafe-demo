@@ -98,7 +98,7 @@ Structure (top-level keys; `_notes` fields are comments, not data):
 
 - Collect: order type (delivery / takeaway / dine-in), name, phone, address (delivery only), optional notes.
 - Phone: Pakistani format. Accept `03xxxxxxxxx`, normalise to `923xxxxxxxxx`.
-- Validate with simple inline errors.
+- Validate with simple inline errors, following section 13.
 - The WhatsApp number comes from env var `NEXT_PUBLIC_WHATSAPP_NUMBER`, not from `restaurant.whatsapp`. Create `.env.example` containing it; `.gitignore` currently ignores `.env*`, so add a `!.env.example` exception. If the variable is missing, show a clear message instead of a broken link.
 - Open `https://wa.me/<number>?text=<encoded message>`. The message is plain text, readable on a phone, in this order:
   1. header with the restaurant name
@@ -188,6 +188,15 @@ Starting colour tokens:
 - After changes, run `npm run lint` and `npm run build` and fix errors.
 - Don't install new dependencies without saying why.
 - If something in `menu.json` seems wrong or ambiguous, ask instead of guessing.
+
+## 13. Forms and validation
+
+- All forms and validation use **react-hook-form** (7.x) + **zod** (**v4**). Check `package.json` for the exact versions and follow the matching API; zod v3 and v4 differ.
+- Connect them with `zodResolver` from `@hookform/resolvers` (5.x, installed). If it is ever missing, say so before installing it.
+- Build forms with shadcn's form components, not raw unstyled inputs. None are added yet; the registry has `form` and `field`, so add what's needed with `npx shadcn add <name>`.
+- Define each zod schema once, in `lib/validations/`, and derive the TypeScript types with `z.infer`. Don't write separate interfaces for form data.
+- Show error messages inline under each field, in short plain English.
+- Don't use any other form or validation library, and don't write manual validation logic.
 
 ## Open questions
 
