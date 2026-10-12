@@ -198,6 +198,37 @@ Starting colour tokens:
 - Show error messages inline under each field, in short plain English.
 - Don't use any other form or validation library, and don't write manual validation logic.
 
+## 14. Spec roadmap
+
+Each feature gets one numbered spec in `.claude/specs/`. Build in this order.
+
+| # | Spec | Scope | Depends on | Status |
+|---|------|-------|------------|--------|
+| 01 | `01-project-setup` | Remove scaffold leftovers (placeholder page, unused `public/*.svg`, `app/favicon.ico`); add `.env.example` and the `.gitignore` exception; lint and build pass. Scaffold, shadcn init and form libraries already exist. | — | Stub |
+| 02 | `02-brand-theme` | Brand colour tokens as shadcn CSS variables, dark-only, display + body fonts, shared brand primitives (two-colour heading, gold rule with diamond, pill label). | 01 | Stub |
+| 03 | `03-menu-data-helpers` | `types/menu.ts`, typed access to `menu.json`, lookups (size labels, add-on groups, image fallback, tags), TBD-safe values, `Rs. 1,599` formatter. | 01 | Stub |
+| 04 | `04-site-layout` | Root layout, header with logo, footer with TBD-safe contact details, favicon, `metadata`. Logos and `app/icon.svg` already exist. | 02, 03 | Stub |
+| 05 | `05-item-cards` | Product image in a fixed `object-contain` box; display-only item card with name, description, price tag, "NEW" badge, veg indicator. | 02, 03 | Stub |
+| 06 | `06-menu-page` | `/menu` with sticky category bar, Cairo Crunch first and highlighted, all categories with item cards, `sides` / `drinks` sub-groups, a Deals entry in the bar. | 04, 05 | Stub |
+| 07 | `07-cart-store` | Zustand store with safe `persist`, cart line model (items, combos, deals), line identity, plain pricing functions. Installs Zustand. | 03 | Stub |
+| 08 | `08-cart-drawer` | `Sheet` with lines, quantity controls, remove, subtotal, delivery note, empty state, link to checkout; header cart button and sticky mobile cart button. | 04, 07 | Stub |
+| 09 | `09-item-customiser` | Shared add-to-cart surface opened from an item card: quantity, live total, Add to cart. Handles single-variant items end to end. | 05, 06, 07 | Stub |
+| 10 | `10-pizza-size-selection` | Required size choice in the customiser, showing only the sizes in that pizza's `variants`. | 09 | Stub |
+| 11 | `11-cairo-version-toggle` | Authentic / Lahori Twist `ToggleGroup` that swaps name, description, price, tags and image. | 09 | Stub |
+| 12 | `12-dips-pickers` | One data-driven add-on picker for `cairo-dips` (first free, then `extraPrice`) and `dips` (per-option `price`), respecting `maxSelect`. | 09 | Stub |
+| 13 | `13-cairo-combo-builder` | Step-by-step combo picker (main → fixed fries → drink), Loaded upgrade, combo dips, add to cart. | 11, 12 | Stub |
+| 14 | `14-deals` | Deal cards in the menu's Deals section; picker for `choose` lines (pizza flavour by `from` + `size`, soft drink, one selection per `qty`); add to cart as a bundle. | 06, 07, 09 | Stub |
+| 15 | `15-home-hero-cairo-feature` | `/` hero (Tamaya image, dark gradient, gold glow, headline, "Order Now") and the featured Cairo Crunch section. | 04, 05 | Stub |
+| 16 | `16-home-sections` | Rest of `/`: category shortcuts, deals preview, TBD-safe location/contact section. | 14, 15 | Stub |
+| 17 | `17-checkout-form` | `/checkout` with order summary and the form (order type, name, phone, address, notes) per section 13; empty-cart state. | 07, 08 | Stub |
+| 18 | `18-whatsapp-order` | Plain-text message builder, `wa.me` link, missing-env-var message, clear the cart only after the customer confirms sending. | 17 | Stub |
+| 19 | `19-responsive-accessibility-polish` | Final pass on all pages: mobile widths, 44px tap targets, focus states, icon-button labels, contrast, card alignment. | 01–18 | Stub |
+
+- Statuses are `Stub` (not built yet) or `Implemented` (built and verified against its acceptance criteria).
+- Create a spec with `/create-spec <number> <name>` using the number and slug from this table.
+- After a spec is implemented and verified, update its status in this table.
+- New features get the next free number. Don't renumber existing specs.
+
 ## Open questions
 
 From `menu.json` → `openQuestions`, still unconfirmed by the owners:

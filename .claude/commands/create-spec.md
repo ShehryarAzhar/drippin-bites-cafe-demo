@@ -69,9 +69,10 @@ empty/loading/error states, accessibility notes.
 Which parts of menu.json / cart state / env vars are used, with real field names.
 Any new types or zod schemas needed.
 
-## Implementation plan
-Files to create and files to modify (with paths), and what each contains.
-Ordered steps small enough to implement and check one at a time.
+## Implementation outline
+- The files to create and the files to modify, with paths and a one-line purpose each.
+- The rough order of the work as 3–6 short bullets (e.g. types → store → components → page).
+- No code, no detailed step-by-step instructions, and no exact function signatures. Those are decided in Plan Mode against the current code.
 
 ## Edge cases
 ## Acceptance criteria
