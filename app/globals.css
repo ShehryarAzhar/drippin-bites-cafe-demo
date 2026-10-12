@@ -70,6 +70,15 @@
   --input: color-mix(in oklab, var(--cream) 18%, transparent);
   --ring: var(--gold);
   --radius: 0.875rem;
+
+  /* Height of the sticky site header; anything stuck below it offsets by this. */
+  --header-height: 4rem;
+}
+
+@media (width >= 40rem) {
+  :root {
+    --header-height: 4.5rem;
+  }
 }
 
 /* Heading scale: hero > section > card. The only place heading sizes live.
@@ -110,6 +119,8 @@
   html {
     @apply bg-background font-sans;
     color-scheme: dark;
+    /* Keeps anchor targets clear of the sticky header. */
+    scroll-padding-top: var(--header-height);
   }
   body {
     @apply text-foreground;

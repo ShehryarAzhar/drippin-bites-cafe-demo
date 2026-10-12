@@ -11,7 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - The restaurant does dine-in, takeaway and delivery, and currently takes orders manually on WhatsApp.
 - Main selling point: the **Cairo Crunch** Egyptian street-food line (Hawawshi, Ful, Tamaya, Chicken Faroge). Everything on the site pushes Cairo Crunch first.
 - Audience: mostly mobile users arriving from Instagram. Design **mobile-first**.
-- Current state: a cleaned scaffold with the brand theme and menu data helpers in place (specs 01–03). `app/page.tsx` is a branded holding page (pill label, two-colour cafe name, gold rule); the `metadata` in `app/layout.tsx` is still the stock placeholder. Components so far: `components/ui/button.tsx` (restyled: gold pill primary, every size at least 44px) and the brand primitives in `components/brand/` (`BrandHeading`, `GoldRule`, `PillLabel`). Menu access: `types/menu.ts` (all menu types), `lib/menu.ts` (the only import of `menu.json`, plus the lookups) and `lib/format.ts` (`formatPrice`, `tbdSafe`); no page uses them yet. Menu data, images and logos are already in place.
+- Current state: the brand theme, menu data helpers and the site shell are in place (specs 01–04). `app/layout.tsx` sets `metadata` and `viewport` from `menu.restaurant` and wraps every page in a skip link, the sticky header, `<main id="content">` and the footer (`components/layout/`: `SiteHeader`, `SiteFooter`, and the client `NavLink` for the active link). `app/page.tsx` is a branded holding page (pill label, two-colour cafe name, gold rule) and `app/not-found.tsx` is the branded 404; the header and footer already link to `/menu`, which shows the 404 until spec 06. Other components so far: `components/ui/button.tsx` (restyled: gold pill primary, every size at least 44px) and the brand primitives in `components/brand/` (`BrandHeading`, `GoldRule`, `PillLabel`). Menu access: `types/menu.ts` (all menu types), `lib/menu.ts` (the only import of `menu.json`, plus the lookups) and `lib/format.ts` (`formatPrice`, `tbdSafe`); only the layout and footer use them so far. Menu data, images and logos are already in place.
 
 ## 2. Tech stack and commands
 
@@ -117,8 +117,8 @@ Structure (top-level keys; `_notes` fields are comments, not data):
   - Then: featured Cairo Crunch section, category shortcuts, deals preview, location/contact section (TBD-safe).
 - **Menu `/menu`**: category tabs or a sticky category bar, Cairo Crunch always first and visually highlighted. Deals reachable from the menu.
 - **Checkout `/checkout`**
-- **Shared:** header with logo and cart button, footer.
-- Use the Next.js `metadata` API for title and description (the current values are the create-next-app defaults).
+- **Shared:** header with logo and cart button, footer. The root layout owns the only `<main>`; pages render their content inside it and must not add their own. The header height is `--header-height` in `globals.css` (also the `scroll-padding-top`); anything sticky below the header offsets by it. The cart button (spec 08) goes in the header's actions group after the Menu link.
+- Use the Next.js `metadata` API for title and description. The root layout sets the default title and the template `%s | Drippin Bites Cafe`, so a page exports only its own short `title`.
 
 ## 8. Brand and design
 
@@ -222,7 +222,7 @@ Each feature gets one numbered spec in `.claude/specs/`. Build in this order.
 | 01 | `01-project-setup` | Remove scaffold leftovers (placeholder page, unused `public/*.svg`, `app/favicon.ico`); add `.env.example` and the `.gitignore` exception; lint and build pass. Scaffold, shadcn init and form libraries already exist. | — | Implemented |
 | 02 | `02-brand-theme` | Brand colour tokens as shadcn CSS variables, dark-only, display + body fonts, shared brand primitives (two-colour heading, gold rule with diamond, pill label). | 01 | Implemented |
 | 03 | `03-menu-data-helpers` | `types/menu.ts`, typed access to `menu.json`, lookups (size labels, add-on groups, image fallback, tags), TBD-safe values, `Rs. 1,599` formatter. | 01 | Implemented |
-| 04 | `04-site-layout` | Root layout, header with logo, footer with TBD-safe contact details, favicon, `metadata`. Logos and `app/icon.svg` already exist. | 02, 03 | Stub |
+| 04 | `04-site-layout` | Root layout, header with logo, footer with TBD-safe contact details, favicon, `metadata`. Logos and `app/icon.svg` already exist. | 02, 03 | Implemented |
 | 05 | `05-item-cards` | Product image in a fixed `object-contain` box; display-only item card with name, description, price tag, "NEW" badge, veg indicator. | 02, 03 | Stub |
 | 06 | `06-menu-page` | `/menu` with sticky category bar, Cairo Crunch first and highlighted, all categories with item cards, `sides` / `drinks` sub-groups, a Deals entry in the bar. | 04, 05 | Stub |
 | 07 | `07-cart-store` | Zustand store with safe `persist`, cart line model (items, combos, deals), line identity, plain pricing functions. Installs Zustand. | 03 | Stub |
@@ -238,6 +238,7 @@ Each feature gets one numbered spec in `.claude/specs/`. Build in this order.
 | 17 | `17-checkout-form` | `/checkout` with order summary and the form (order type, name, phone, address, notes) per section 13; empty-cart state. | 07, 08 | Stub |
 | 18 | `18-whatsapp-order` | Plain-text message builder, `wa.me` link, missing-env-var message, clear the cart only after the customer confirms sending. | 17 | Stub |
 | 19 | `19-responsive-accessibility-polish` | Final pass on all pages: mobile widths, 44px tap targets, focus states, icon-button labels, contrast, card alignment. | 01–18 | Stub |
+| 20 | `20-share-preview` | Generated Open Graph image (`opengraph-image.tsx` with logo + brand colours), Apple touch icon and `metadataBase`, once the demo URL is known. | 04 | Stub |
 
 - Statuses are `Stub` (not built yet) or `Implemented` (built and verified against its acceptance criteria).
 - Create a spec with `/create-spec <number> <name>` using the number and slug from this table.
