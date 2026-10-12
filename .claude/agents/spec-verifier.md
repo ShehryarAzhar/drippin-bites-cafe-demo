@@ -25,6 +25,7 @@ You are given the path of one spec file in `.claude/specs/`. If no path is given
    - prices, item names and descriptions come only from `data/menu.json`, never hard-coded
    - images come only from `public/images`, rendered with `next/image` and `object-contain`
    - shadcn components and theme tokens are used, with no ad-hoc colours
+   - the design quality bar in section 8a: the UI matches the specific visual treatment in the spec's "UI & design" section, and follows 8a's rules on product images, type scale, spacing, depth, motion (including `prefers-reduced-motion`), restyled shadcn components and designed states. Judge what the code shows (classes, tokens, states handled); list anything that needs eyes on the page under manual checks. If the spec's "UI & design" section is too vague to check against, report that as an issue.
    - forms use react-hook-form + zod as described in the forms section
    - TypeScript types come from the shared menu types file
    - no out-of-scope features (backend, auth, payments, WhatsApp API automation, admin, videos)

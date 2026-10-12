@@ -146,6 +146,20 @@ Starting colour tokens:
 - Fonts via `next/font`: a condensed display font for headings (e.g. Bebas Neue or Anton) and a clean sans for body. `app/layout.tsx` currently loads Inter (`--font-sans`), Geist and Geist Mono; replace as needed and keep `--font-heading` in `@theme` pointing at the display font.
 - Text contrast must stay readable: cream on dark, dark text on cream cards.
 
+## 8a. Design quality bar
+
+- For all UI work, use the installed `frontend-design` skill alongside section 8.
+- The bar: the site must feel like a premium street-food brand, as considered as the posters in `docs/brand/`, not a template.
+- **Food is the hero:** large product images with a soft gold radial glow behind each transparent cutout. No small thumbnails in plain boxes.
+- **Poster-style type:** large headings on a clear size scale (hero > section > card > body), using section 8's two-colour treatment for headlines.
+- **Spacing:** generous and consistent, never cramped on mobile.
+- **Depth:** grain, warm gradients and soft shadows. Use section 8's diamond rules and pill labels as section dividers.
+- **Motion:** subtle hover and press feedback, 150–300ms transitions, gentle reveal on scroll. Respect `prefers-reduced-motion`. CSS/Tailwind only; no new animation library without asking.
+- **Avoid the default shadcn look:** grey borders, flat identical boxes, default radius everywhere, plain grey surfaces. Restyle components with brand tokens.
+- **Design every state:** empty cart, missing image, TBD contact details, form errors, success.
+- Check at 375px width first, then desktop. Card grids align, and prices never wrap awkwardly.
+- Every spec's "UI & design" section must describe the visual treatment specifically, and `/verify-spec` checks it.
+
 ## 9. Images and logos
 
 - `public/images/` is the **only** source of images used in the app. `menu.json` paths like `/images/...` point there.
