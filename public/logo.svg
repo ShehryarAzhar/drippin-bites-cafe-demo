@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 -14 787 180" role="img" aria-label="Drippin Bites Cafe">
+  <title>Drippin Bites Cafe</title>
+  <g transform="translate(-13.200000000000001 -10) scale(1.32)">
+    <mask id="bite-h" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="112">
+      <rect width="100" height="112" fill="#fff"/>
+      <circle cx="88" cy="40" r="10" fill="#000"/>
+      <circle cx="93" cy="56" r="10" fill="#000"/>
+      <circle cx="92" cy="72" r="9" fill="#000"/>
+    </mask>
+    <path d="M50,0C50,0 90,48 90,72A40,40 0 1 1 10,72C10,48 50,0 50,0Z" fill="#EBA92B" mask="url(#bite-h)"/>
+    <g transform="translate(27.00 56) scale(0.4)"><g transform="translate(0.00 0.00) scale(1)" fill="#14100C" fill-rule="evenodd"><path transform="translate(0.00 0)" d="M0,0H30Q52,0 52,22V78Q52,100 30,100H0Z M20,20H28Q32,20 32,24V76Q32,80 28,80H20Z"/><path transform="translate(58.00 0)" d="M0,0H30Q50,0 50,20V36Q50,46 43,50Q52,54 52,64V80Q52,100 32,100H0Z M20,18H27Q30,18 30,21V39Q30,42 27,42H20Z M20,58H29Q32,58 32,61V79Q32,82 29,82H20Z"/></g></g>
+  </g>
+  <g transform="translate(152.80 0.00) scale(1)" fill="#F3E6CC" fill-rule="evenodd"><path transform="translate(0.00 0)" d="M0,0H30Q52,0 52,22V78Q52,100 30,100H0Z M20,20H28Q32,20 32,24V76Q32,80 28,80H20Z"/><path transform="translate(60.00 0)" d="M0,0H30Q52,0 52,22V36Q52,50 42,54L54,100H33L23,58H20V100H0Z M20,20H28Q32,20 32,24V34Q32,38 28,38H20Z"/><path transform="translate(122.00 0)" d="M0,0H20V100H0Z"/><path transform="translate(150.00 0)" d="M0,0H30Q52,0 52,22V40Q52,62 30,62H20V100H0Z M20,20H28Q32,20 32,24V38Q32,42 28,42H20Z"/><path transform="translate(210.00 0)" d="M0,0H30Q52,0 52,22V40Q52,62 30,62H20V100H0Z M20,20H28Q32,20 32,24V38Q32,42 28,42H20Z"/><path transform="translate(270.00 0)" d="M0,0H20V100H0Z"/><path transform="translate(298.00 0)" d="M0,0H18L34,56V0H52V100H34L18,44V100H0Z"/></g>
+  <g transform="translate(526.80 0.00) scale(1)" fill="#EBA92B" fill-rule="evenodd"><path transform="translate(0.00 0)" d="M0,0H30Q50,0 50,20V36Q50,46 43,50Q52,54 52,64V80Q52,100 32,100H0Z M20,18H27Q30,18 30,21V39Q30,42 27,42H20Z M20,58H29Q32,58 32,61V79Q32,82 29,82H20Z"/><path transform="translate(60.00 0)" d="M0,0H20V100H0Z"/><path transform="translate(88.00 0)" d="M0,0H50V20H35V100H15V20H0Z"/><path transform="translate(146.00 0)" d="M0,0H46V20H20V40H40V60H20V80H46V100H0Z"/><path transform="translate(200.00 0)" d="M22,0H50V20H24Q20,20 20,24V36Q20,40 24,40H30Q52,40 52,62V78Q52,100 30,100H0V80H28Q32,80 32,76V64Q32,60 28,60H22Q0,60 0,38V22Q0,0 22,0Z"/></g>
+  <path fill="#F3E6CC" d="M274.8,99H294.8V108Q294.8,114 290.8,118Q287.8,121 287.8,127V131Q287.8,138 284.8,138Q281.8,138 281.8,131V126Q281.8,121 278.8,118Q274.8,114 274.8,108Z"/><path fill="#EBA92B" d="M284.8,144C284.8,144 289.8,151 289.8,154A5,5 0 1 1 279.8,154C279.8,151 284.8,144 284.8,144Z"/>
+  <path d="M318.8,135H407.24 M524.36,135H778.8" stroke="#EBA92B" stroke-width="2" stroke-linecap="round"/><path d="M415.24,131L419.24,135L415.24,139L411.24,135Z" fill="#EBA92B"/><path d="M516.36,131L520.36,135L516.36,139L512.36,135Z" fill="#EBA92B"/>
+  <g transform="translate(433.24 124.00) scale(0.22)" fill="#EBA92B" fill-rule="evenodd"><path transform="translate(0.00 0)" d="M22,0H50V20H24Q20,20 20,24V76Q20,80 24,80H50V100H22Q0,100 0,78V22Q0,0 22,0Z"/><path transform="translate(84.00 0)" d="M14,0H38L52,100H32L30,82H22L20,100H0Z M23,64H29L26,30Z"/><path transform="translate(170.00 0)" d="M0,0H46V20H20V40H40V60H20V100H0Z"/><path transform="translate(250.00 0)" d="M0,0H46V20H20V40H40V60H20V80H46V100H0Z"/></g>
+</svg>
