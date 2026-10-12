@@ -1,0 +1,490 @@
+{
+  "_notes": [
+    "Single source of truth for the Drippin Bites demo menu. All prices are PKR integers.",
+    "Spelling is corrected from the printed menu (Iceberg, Capsicum, Macaroni, Afghani, Cheesy, Buffalo, Nuggets, Margarita, Vanilla).",
+    "Every item has at least one variant. A single-price item has one variant with id 'regular'.",
+    "Variants may override name, description and image (used by Cairo Crunch Authentic / Lahori Twist).",
+    "Deal 12 is printed as 'The Big Drip' (same as deal 1); renamed to 'The Big Drip II' until the owners confirm.",
+    "Items that appear only inside deals (nuggets, strips, wings, cheese balls, fries, mini burgers, shakes, mocktails, lava cake) are not sold separately in this menu."
+  ],
+  "restaurant": {
+    "name": "Drippin Bites Cafe",
+    "shortName": "Drippin Bites",
+    "tagline": "Stay Drippin', Stay Vibin'",
+    "area": "Johar Town, Lahore",
+    "address": "TBD",
+    "whatsapp": "TBD",
+    "phone": "TBD",
+    "hours": "TBD",
+    "currency": "PKR",
+    "orderTypes": ["delivery", "takeaway", "dine-in"]
+  },
+  "sizes": [
+    { "id": "small", "label": "Small" },
+    { "id": "medium", "label": "Medium" },
+    { "id": "large", "label": "Large" },
+    { "id": "xl", "label": "Extra Large" }
+  ],
+  "addOnGroups": [
+    {
+      "id": "cairo-dips",
+      "name": "Cairo Dips",
+      "description": "1 free, each additional Rs.70",
+      "image": "/images/cairo/cairo-dips.webp",
+      "freeCount": 1,
+      "extraPrice": 70,
+      "maxSelect": 4,
+      "options": [
+        { "id": "toum", "name": "Garlic Tahini (Toum)" },
+        { "id": "shatta", "name": "Shatta" },
+        { "id": "cairo-special", "name": "Cairo Special" },
+        { "id": "mint-yogurt", "name": "Mint-Yogurt" }
+      ]
+    },
+    {
+      "id": "dips",
+      "name": "Extra Dips",
+      "description": "Optional paid dips",
+      "freeCount": 0,
+      "maxSelect": 8,
+      "options": [
+        { "id": "chipotle", "name": "Chipotle Sauce", "price": 80 },
+        { "id": "thousand-island", "name": "Thousand Island Sauce", "price": 80 },
+        { "id": "mint", "name": "Mint Sauce", "price": 60 },
+        { "id": "sriracha", "name": "Sriracha Sauce", "price": 80 },
+        { "id": "signature", "name": "Signature Sauce", "price": 90 },
+        { "id": "special-white", "name": "Special White Sauce", "price": 90 },
+        { "id": "garlic-mayo", "name": "Garlic Mayo Sauce", "price": 70 },
+        { "id": "buffalo", "name": "Buffalo Sauce", "price": 80 }
+      ]
+    }
+  ],
+  "categories": [
+    {
+      "id": "cairo-crunch",
+      "name": "Cairo Crunch",
+      "subtitle": "Egyptian Street Food · Live",
+      "tagline": "Crispy Outside. Bold Inside.",
+      "featured": true,
+      "image": "/images/cairo/tamaya-authentic.webp",
+      "items": [
+        {
+          "id": "hawawshi",
+          "name": "Hawawshi",
+          "subtitle": "Crispy Pockets",
+          "image": "/images/cairo/hawawshi.webp",
+          "variantType": "version",
+          "addOnGroups": ["cairo-dips"],
+          "variants": [
+            { "id": "authentic", "label": "Authentic", "name": "Cairo Beef Hawawshi", "description": "Minced beef, onion, chili, parsley, cumin & allspice, pressed crisp.", "price": 499 },
+            { "id": "lahori", "label": "Lahori Twist", "name": "Lahori Tikka Hawawshi", "description": "Chicken tikka masala, melted cheese & mint chutney.", "price": 649 }
+          ]
+        },
+        {
+          "id": "ful",
+          "name": "Ful",
+          "subtitle": "Fava Bean Classic",
+          "image": "/images/cairo/ful-authentic.webp",
+          "variantType": "version",
+          "addOnGroups": ["cairo-dips"],
+          "variants": [
+            { "id": "authentic", "label": "Authentic", "name": "Ful Medames Sandwich", "description": "Mashed ful with cumin, lemon, olive oil & tahini in baladi bread.", "price": 649, "tags": ["veg"], "image": "/images/cairo/ful-authentic.webp" },
+            { "id": "lahori", "label": "Lahori Twist", "name": "Ful Masala Roll", "description": "Desi-spiced ful with achaar, egg & chutney in paratha.", "price": 749, "image": "/images/cairo/ful-lahori.webp" }
+          ]
+        },
+        {
+          "id": "tamaya",
+          "name": "Tamaya",
+          "subtitle": "Egyptian Falafel",
+          "image": "/images/cairo/tamaya-authentic.webp",
+          "variantType": "version",
+          "addOnGroups": ["cairo-dips"],
+          "variants": [
+            { "id": "authentic", "label": "Authentic", "name": "Tamaya Sandwich", "description": "Fava-bean falafel, tahini, tomato & salad in baladi bread.", "price": 499, "tags": ["veg"], "image": "/images/cairo/tamaya-authentic.webp" },
+            { "id": "lahori", "label": "Lahori Twist", "name": "Tamaya Chaat Roll", "description": "Falafel with imli-podina chutney, yogurt & chaat masala.", "price": 499, "image": "/images/cairo/tamaya-lahori.webp" }
+          ]
+        },
+        {
+          "id": "faroge",
+          "name": "Chicken Faroge",
+          "subtitle": "Grilled Wrap",
+          "image": "/images/cairo/faroge.webp",
+          "variantType": "version",
+          "addOnGroups": ["cairo-dips"],
+          "variants": [
+            { "id": "authentic", "label": "Authentic", "name": "Faroge Garlic Wrap", "description": "Grilled faroge chicken, toum (garlic sauce), pickles & fries.", "price": 549 },
+            { "id": "lahori", "label": "Lahori Twist", "name": "Faroge Tikka Wrap", "description": "Malai/tikka boti, mint chutney, cheese & fresh salad.", "price": 599 }
+          ]
+        },
+        {
+          "id": "sando-sandwich",
+          "name": "Sando Sandwich",
+          "description": "Crispy chicken fillet, cheese slice, tomato, onion, iceberg, chipotle sauce, thousand island sauce.",
+          "image": "/images/cairo/sando-sandwich.webp",
+          "tags": ["new"],
+          "variants": [{ "id": "regular", "label": "Regular", "price": 499 }]
+        },
+        {
+          "id": "croissant-sandwich",
+          "name": "Crunchy Cheesy Croissant Sandwich",
+          "description": "Grilled chicken, cheese, cucumber, tomato, iceberg, chipotle sauce, garlic sauce.",
+          "image": "/images/cairo/croissant-sandwich.webp",
+          "tags": ["new"],
+          "variants": [{ "id": "regular", "label": "Regular", "price": 599 }]
+        },
+        {
+          "id": "cairo-fries",
+          "name": "Cairo Fries",
+          "description": "Fries with dukkah and tahini.",
+          "image": "/images/cairo/cairo-sides.webp",
+          "group": "sides",
+          "variants": [{ "id": "regular", "label": "Regular", "price": 299 }]
+        },
+        {
+          "id": "tamaya-bites",
+          "name": "Tamaya Bites",
+          "description": "Egyptian falafel bites, 6 pcs.",
+          "image": "/images/cairo/cairo-sides.webp",
+          "group": "sides",
+          "tags": ["veg"],
+          "variants": [{ "id": "regular", "label": "6 pcs", "price": 349 }]
+        },
+        {
+          "id": "limonana",
+          "name": "Limonana",
+          "description": "Mint lemonade.",
+          "image": "/images/cairo/cairo-drinks.webp",
+          "group": "drinks",
+          "variants": [{ "id": "regular", "label": "Regular", "price": 199 }]
+        },
+        {
+          "id": "karkade",
+          "name": "Karkade",
+          "description": "Iced hibiscus.",
+          "image": "/images/cairo/cairo-drinks.webp",
+          "group": "drinks",
+          "variants": [{ "id": "regular", "label": "Regular", "price": 179 }]
+        }
+      ]
+    },
+    {
+      "id": "classic-pizza",
+      "name": "Classic Pizza",
+      "image": "/images/categories/pizza-classic.webp",
+      "variantType": "size",
+      "items": [
+        { "id": "chicken-supreme", "name": "Chicken Supreme", "description": "Chicken fajita, chicken tikka, red pizza sauce, onion, cheese, tomato, capsicum, olives, jalapeño, mushroom, sweet corn. Topped with white sauce.", "variants": [{ "id": "small", "price": 499 }, { "id": "medium", "price": 999 }, { "id": "large", "price": 1599 }, { "id": "xl", "price": 2299 }] },
+        { "id": "tikka", "name": "Tikka", "description": "Tikka, red pizza sauce, cheese, onion.", "variants": [{ "id": "small", "price": 499 }, { "id": "medium", "price": 999 }, { "id": "large", "price": 1599 }, { "id": "xl", "price": 2299 }] },
+        { "id": "fajita", "name": "Fajita", "description": "Fajita chicken, red pizza sauce, cheese, onion, capsicum.", "variants": [{ "id": "small", "price": 499 }, { "id": "medium", "price": 999 }, { "id": "large", "price": 1599 }, { "id": "xl", "price": 2299 }] },
+        { "id": "bbq", "name": "BBQ", "description": "Fajita chicken, BBQ sauce, cheese, onion, tomato, olives.", "variants": [{ "id": "small", "price": 499 }, { "id": "medium", "price": 999 }, { "id": "large", "price": 1599 }, { "id": "xl", "price": 2299 }] },
+        { "id": "fajita-sicilian", "name": "Fajita Sicilian", "description": "Fajita chicken, red pizza sauce, cheese, onion, capsicum, jalapeño.", "variants": [{ "id": "small", "price": 499 }, { "id": "medium", "price": 999 }, { "id": "large", "price": 1599 }, { "id": "xl", "price": 2299 }] },
+        { "id": "cheese-lover", "name": "Cheese Lover", "description": "Cheese, red pizza sauce.", "variants": [{ "id": "small", "price": 499 }, { "id": "medium", "price": 999 }, { "id": "large", "price": 1599 }, { "id": "xl", "price": 2299 }] },
+        { "id": "veggie-lover", "name": "Veggie Lover", "description": "Cheese, red pizza sauce, onion, tomato, capsicum, mushroom, olives, jalapeño, sweet corn.", "variants": [{ "id": "small", "price": 499 }, { "id": "medium", "price": 999 }, { "id": "large", "price": 1599 }, { "id": "xl", "price": 2299 }] },
+        { "id": "chicken-pepperoni", "name": "Chicken Pepperoni", "description": "Red pizza sauce, cheese, chicken pepperoni.", "variants": [{ "id": "small", "price": 499 }, { "id": "medium", "price": 999 }, { "id": "large", "price": 1599 }, { "id": "xl", "price": 2299 }] },
+        { "id": "beef-pepperoni", "name": "Beef Pepperoni", "description": "Red pizza sauce, cheese, beef pepperoni.", "variants": [{ "id": "small", "price": 499 }, { "id": "medium", "price": 999 }, { "id": "large", "price": 1599 }, { "id": "xl", "price": 2299 }] }
+      ]
+    },
+    {
+      "id": "special-pizza",
+      "name": "Special Pizza",
+      "image": "/images/categories/pizza-special.webp",
+      "variantType": "size",
+      "items": [
+        { "id": "lasagna", "name": "Lasagna", "description": "Chicken fajita, chicken tikka, red pizza sauce, onion, cheese, special bread, tomato, olives, capsicum. Topped with chipotle and white sauce.", "variants": [{ "id": "large", "price": 1649 }, { "id": "xl", "price": 2399 }] },
+        { "id": "crown-crust", "name": "Crown Crust", "description": "Fajita chicken, red pizza sauce, cheese, onion, capsicum, olives. Topped with white sauce.", "variants": [{ "id": "medium", "price": 1149 }, { "id": "large", "price": 1699 }, { "id": "xl", "price": 2399 }] },
+        { "id": "hot-dragon", "name": "Hot Dragon", "description": "Red spicy chicken, chipotle sauce, onion, cheese, tomato, capsicum. Topped with special sauce.", "tags": ["new"], "variants": [{ "id": "small", "price": 649 }, { "id": "medium", "price": 1249 }, { "id": "large", "price": 1699 }, { "id": "xl", "price": 2399 }] }
+      ]
+    },
+    {
+      "id": "premium-pizza",
+      "name": "Premium Pizza",
+      "image": "/images/categories/pizza-premium.webp",
+      "variantType": "size",
+      "items": [
+        { "id": "drippin-special-pizza", "name": "Drippin Special", "description": "Chicken fajita, chicken tikka, red pizza sauce, cheese, olives, capsicum, onion. Topped with chipotle sauce and fries.", "variants": [{ "id": "medium", "price": 1149 }, { "id": "large", "price": 1699 }, { "id": "xl", "price": 2399 }] },
+        { "id": "afghani-malai-boti", "name": "Afghani Malai Boti", "description": "Afghani malai boti chicken, white sauce, onion, cheese, tomato. Topped with white sauce.", "variants": [{ "id": "small", "price": 649 }, { "id": "medium", "price": 1249 }, { "id": "large", "price": 1699 }, { "id": "xl", "price": 2399 }] },
+        { "id": "sauce-stuffing", "name": "Sauce Stuffing", "description": "Chicken tikka, red pizza sauce, cheese, onion, olives, jalapeño, capsicum. Topped with white sauce.", "variants": [{ "id": "medium", "price": 1149 }, { "id": "large", "price": 1699 }, { "id": "xl", "price": 2399 }] },
+        { "id": "cheese-stuffing", "name": "Cheese Stuffing", "description": "Chicken fajita, red pizza sauce, cheese, onion, tomato, jalapeño, capsicum. Topped with thousand island sauce.", "variants": [{ "id": "medium", "price": 1149 }, { "id": "large", "price": 1699 }, { "id": "xl", "price": 2399 }] },
+        { "id": "kabab-stuffing", "name": "Kabab Stuffing", "description": "Chicken fajita, chicken tikka, cheese, white sauce, onion, capsicum, jalapeño, mushroom. Topped with chipotle sauce.", "variants": [{ "id": "medium", "price": 1349 }, { "id": "large", "price": 1799 }, { "id": "xl", "price": 2499 }] }
+      ]
+    },
+    {
+      "id": "burgers",
+      "name": "Burgers",
+      "image": "/images/categories/burgers.webp",
+      "addOnGroups": ["dips"],
+      "items": [
+        { "id": "zinger-burger", "name": "Zinger Burger", "description": "Crunchy patty, iceberg, base sauce, chipotle sauce.", "variants": [{ "id": "regular", "label": "Regular", "price": 449 }] },
+        { "id": "mighty-zinger-burger", "name": "Mighty Zinger Burger", "description": "Crunchy double patty, cheese slice, iceberg, base sauce, chipotle sauce.", "variants": [{ "id": "regular", "label": "Regular", "price": 699 }] },
+        { "id": "patty-burger", "name": "Patty Burger", "description": "Chicken patty, iceberg, sriracha sauce.", "variants": [{ "id": "regular", "label": "Regular", "price": 400 }] },
+        { "id": "fillet-burger", "name": "Fillet Burger", "description": "Chicken fillet, iceberg, chipotle sauce, base sauce.", "variants": [{ "id": "regular", "label": "Regular", "price": 449 }] },
+        { "id": "steak-burger", "name": "Steak Burger", "description": "Grilled chicken, cheese slice, base sauce, signature sauce, onion, tomato.", "variants": [{ "id": "regular", "label": "Regular", "price": 599 }] },
+        { "id": "cheese-stuff-burger", "name": "Cheese Stuff Burger", "description": "Crunchy cheese-stuffed chicken, base sauce, iceberg, chipotle sauce.", "variants": [{ "id": "regular", "label": "Regular", "price": 749 }] },
+        { "id": "drippin-special-burger", "name": "Drippin Special Burger", "description": "Spicy crunchy chicken, base sauce, iceberg, sriracha sauce, signature sauce.", "variants": [{ "id": "regular", "label": "Regular", "price": 699 }] },
+        { "id": "americano-beef-burger", "name": "Americano Beef Burger", "description": "Single beef patty, iceberg, base sauce, cheese slice, chipotle sauce.", "variants": [{ "id": "regular", "label": "Regular", "price": 549 }] },
+        { "id": "chmicow-beef-burger", "name": "Chmicow Beef Burger", "description": "Double beef patty, iceberg, base sauce, cheese slice, fried onion, BBQ sauce, signature sauce.", "variants": [{ "id": "regular", "label": "Regular", "price": 899 }] },
+        { "id": "mushroom-burger", "name": "Mushroom Burger", "description": "Double beef patty, iceberg, base sauce, cheese slice, salted mushroom, chipotle sauce.", "variants": [{ "id": "regular", "label": "Regular", "price": 899 }] }
+      ]
+    },
+    {
+      "id": "sandwiches",
+      "name": "Sandwiches",
+      "image": "/images/categories/sandwiches.webp",
+      "addOnGroups": ["dips"],
+      "items": [
+        { "id": "grilled-chicken-cheese", "name": "Grilled Chicken Cheese", "description": "Grilled chicken, iceberg, thousand island sauce, chipotle sauce, cheese slice, onion, tomato, jalapeño.", "variants": [{ "id": "regular", "label": "Regular", "price": 499 }] },
+        { "id": "bbq-sandwich", "name": "BBQ Sandwich", "description": "Smokey chicken, iceberg, sriracha sauce, BBQ sauce, onion, olives.", "variants": [{ "id": "regular", "label": "Regular", "price": 449 }] },
+        { "id": "artisan-sandwich", "name": "Artisan Sandwich", "description": "Smashed chicken, iceberg, white sauce, tomato, onion, egg.", "variants": [{ "id": "regular", "label": "Regular", "price": 449 }] }
+      ]
+    },
+    {
+      "id": "wraps",
+      "name": "Wraps",
+      "image": "/images/categories/wraps.webp",
+      "addOnGroups": ["dips"],
+      "items": [
+        { "id": "grilled-wrap", "name": "Grilled Wrap", "description": "Grilled chicken, iceberg, fries, olives, jalapeño, onion, chipotle sauce, signature sauce.", "variants": [{ "id": "regular", "label": "Regular", "price": 449 }] },
+        { "id": "crunchy-wrap", "name": "Crunchy Wrap", "description": "Fried crispy chicken, iceberg, fries, chipotle sauce, mint sauce.", "variants": [{ "id": "regular", "label": "Regular", "price": 499 }] },
+        { "id": "sweet-and-chilli-wrap", "name": "Sweet and Chilli Wrap", "description": "Fried crispy chicken, iceberg, fries, chipotle sauce, sweet and chilli sauce, garlic sauce.", "tags": ["new"], "variants": [{ "id": "regular", "label": "Regular", "price": 549 }] }
+      ]
+    },
+    {
+      "id": "pasta",
+      "name": "Pasta",
+      "image": "/images/categories/pasta.webp",
+      "items": [
+        { "id": "alfredo-pasta", "name": "Alfredo Pasta", "description": "Grilled chicken, special white sauce, cheese, olives, capsicum.", "variants": [{ "id": "regular", "label": "Regular", "price": 749 }] },
+        { "id": "crunchy-pasta", "name": "Crunchy Pasta", "description": "Crunchy chicken, white sauce, cheese, olives, capsicum.", "variants": [{ "id": "regular", "label": "Regular", "price": 799 }] },
+        { "id": "macaroni-cheesy-pasta", "name": "Macaroni Cheesy Pasta", "description": "Capsicum, olives, white sauce, cheese.", "tags": ["new"], "variants": [{ "id": "regular", "label": "Regular", "price": 649 }] }
+      ]
+    },
+    {
+      "id": "dips",
+      "name": "Dips",
+      "image": "/images/categories/dips.webp",
+      "items": [
+        { "id": "chipotle-sauce", "name": "Chipotle Sauce", "variants": [{ "id": "regular", "label": "Regular", "price": 80 }] },
+        { "id": "thousand-island-sauce", "name": "Thousand Island Sauce", "variants": [{ "id": "regular", "label": "Regular", "price": 80 }] },
+        { "id": "mint-sauce", "name": "Mint Sauce", "variants": [{ "id": "regular", "label": "Regular", "price": 60 }] },
+        { "id": "sriracha-sauce", "name": "Sriracha Sauce", "variants": [{ "id": "regular", "label": "Regular", "price": 80 }] },
+        { "id": "signature-sauce", "name": "Signature Sauce", "variants": [{ "id": "regular", "label": "Regular", "price": 90 }] },
+        { "id": "special-white-sauce", "name": "Special White Sauce", "variants": [{ "id": "regular", "label": "Regular", "price": 90 }] },
+        { "id": "garlic-mayo-sauce", "name": "Garlic Mayo Sauce", "variants": [{ "id": "regular", "label": "Regular", "price": 70 }] },
+        { "id": "buffalo-sauce", "name": "Buffalo Sauce", "variants": [{ "id": "regular", "label": "Regular", "price": 80 }] }
+      ]
+    }
+  ],
+  "combos": [
+    {
+      "id": "cairo-combo",
+      "name": "Cairo Combo",
+      "description": "Any pocket or wrap + Cairo Fries + drink.",
+      "image": "/images/cairo/cairo-combo.webp",
+      "price": 749,
+      "upgrades": [
+        { "id": "loaded", "label": "Loaded", "price": 150 }
+      ],
+      "slots": [
+        {
+          "id": "main",
+          "label": "Choose your pocket or wrap",
+          "options": [
+            { "itemId": "hawawshi", "variantId": "authentic" },
+            { "itemId": "hawawshi", "variantId": "lahori" },
+            { "itemId": "ful", "variantId": "authentic" },
+            { "itemId": "ful", "variantId": "lahori" },
+            { "itemId": "tamaya", "variantId": "authentic" },
+            { "itemId": "tamaya", "variantId": "lahori" },
+            { "itemId": "faroge", "variantId": "authentic" },
+            { "itemId": "faroge", "variantId": "lahori" }
+          ]
+        },
+        { "id": "side", "label": "Side", "fixed": { "itemId": "cairo-fries", "variantId": "regular" } },
+        {
+          "id": "drink",
+          "label": "Choose your drink",
+          "options": [
+            { "itemId": "limonana", "variantId": "regular" },
+            { "itemId": "karkade", "variantId": "regular" }
+          ]
+        }
+      ],
+      "addOnGroups": ["cairo-dips"],
+      "_notes": "Assumed: the combo accepts all 8 Cairo pockets/wraps (both versions) at the same Rs.749, and the drink is a Cairo drink. Confirm with owners."
+    }
+  ],
+  "deals": [
+    {
+      "id": "deal-01", "number": 1, "name": "The Big Drip", "price": 2799, "image": "/images/deals/deal-01.webp",
+      "contents": [
+        { "qty": 1, "label": "Large Classic Pizza", "choose": "pizza", "from": ["classic-pizza"], "size": "large" },
+        { "qty": 1, "label": "Large Premium Pizza", "choose": "pizza", "from": ["premium-pizza"], "size": "large" },
+        { "qty": 1, "label": "1.5 Litre Drink", "choose": "soft-drink" }
+      ]
+    },
+    {
+      "id": "deal-02", "number": 2, "name": "XL Hunger Slayer", "price": 2999, "image": "/images/deals/deal-02.webp",
+      "contents": [
+        { "qty": 1, "label": "XL Classic Pizza", "choose": "pizza", "from": ["classic-pizza"], "size": "xl" },
+        { "qty": 2, "label": "Zinger Burger" },
+        { "qty": 1, "label": "Regular Fries" },
+        { "qty": 1, "label": "1.5 Litre Drink", "choose": "soft-drink" }
+      ]
+    },
+    {
+      "id": "deal-03", "number": 3, "name": "Pizza Pair", "price": 1599, "image": "/images/deals/deal-03.webp",
+      "contents": [
+        { "qty": 2, "label": "Medium Pizza", "choose": "pizza", "from": ["classic-pizza"], "size": "medium" },
+        { "qty": 1, "label": "1.5 Litre Drink", "choose": "soft-drink" }
+      ]
+    },
+    {
+      "id": "deal-04", "number": 4, "name": "Mini Munch", "price": 999, "image": "/images/deals/deal-04.webp",
+      "contents": [
+        { "qty": 2, "label": "Small Pizza", "choose": "pizza", "from": ["classic-pizza"], "size": "small" },
+        { "qty": 1, "label": "1 Litre Drink", "choose": "soft-drink" }
+      ]
+    },
+    {
+      "id": "deal-05", "number": 5, "name": "Lil' Drippers", "price": 749, "image": "/images/deals/deal-05.webp",
+      "contents": [
+        { "qty": 1, "label": "Nuggets (6 pcs)" },
+        { "qty": 1, "label": "Mini Burger" },
+        { "qty": 1, "label": "Dip Sauce" },
+        { "qty": 1, "label": "Oreo Shake" }
+      ]
+    },
+    {
+      "id": "deal-06", "number": 6, "name": "Mini Feast", "price": 1749, "image": "/images/deals/deal-06.webp",
+      "contents": [
+        { "qty": 2, "label": "Mini Burger" },
+        { "qty": 1, "label": "Classic Small Pizza", "choose": "pizza", "from": ["classic-pizza"], "size": "small" },
+        { "qty": 1, "label": "Chicken Strips (5 pcs)" },
+        { "qty": 1, "label": "Oreo Shake" },
+        { "qty": 1, "label": "Vanilla Ice Cream Shake" }
+      ]
+    },
+    {
+      "id": "deal-07", "number": 7, "name": "Lil' Food Boss", "price": 2449, "image": "/images/deals/deal-07.webp",
+      "contents": [
+        { "qty": 2, "label": "Mini Burger" },
+        { "qty": 1, "label": "Premium Small Pizza", "choose": "pizza", "from": ["premium-pizza"], "size": "small" },
+        { "qty": 1, "label": "Fried Wings (6 pcs)" },
+        { "qty": 1, "label": "Regular Fries" },
+        { "qty": 1, "label": "Strawberry Shake" },
+        { "qty": 1, "label": "Chocolate Shake" },
+        { "qty": 1, "label": "KitKat Shake" }
+      ]
+    },
+    {
+      "id": "deal-08", "number": 8, "name": "Crave Combo", "price": 1199, "image": "/images/deals/deal-08.webp",
+      "contents": [
+        { "qty": 1, "label": "Small Pizza", "choose": "pizza", "from": ["classic-pizza"], "size": "small" },
+        { "qty": 1, "label": "Zinger Burger" },
+        { "qty": 1, "label": "Regular Fries" },
+        { "qty": 1, "label": "1 Litre Drink", "choose": "soft-drink" }
+      ]
+    },
+    {
+      "id": "deal-09", "number": 9, "name": "Double Trouble", "price": 1999, "image": "/images/deals/deal-09.webp",
+      "contents": [
+        { "qty": 2, "label": "Medium Pizza", "choose": "pizza", "from": ["classic-pizza"], "size": "medium" },
+        { "qty": 1, "label": "Zinger Burger" },
+        { "qty": 1, "label": "1 Litre Drink", "choose": "soft-drink" }
+      ]
+    },
+    {
+      "id": "deal-10", "number": 10, "name": "Full Send", "price": 1599, "image": "/images/deals/deal-10.webp",
+      "contents": [
+        { "qty": 1, "label": "Zinger Burger" },
+        { "qty": 1, "label": "Small Pizza", "choose": "pizza", "from": ["classic-pizza"], "size": "small" },
+        { "qty": 1, "label": "Grilled Chicken Cheese Sandwich" },
+        { "qty": 1, "label": "Regular Fries" },
+        { "qty": 1, "label": "1 Litre Drink", "choose": "soft-drink" }
+      ]
+    },
+    {
+      "id": "deal-11", "number": 11, "name": "Burger Buddies", "price": 1199, "image": "/images/deals/deal-11.webp",
+      "contents": [
+        { "qty": 1, "label": "Cheese Stuff Burger" },
+        { "qty": 1, "label": "Steak Burger" },
+        { "qty": 1, "label": "Regular Fries" },
+        { "qty": 2, "label": "300 ml Drink", "choose": "soft-drink" }
+      ]
+    },
+    {
+      "id": "deal-12", "number": 12, "name": "The Big Drip II", "printedName": "The Big Drip", "price": 2199, "image": "/images/deals/deal-12.webp",
+      "contents": [
+        { "qty": 1, "label": "Small Afghani Malai Boti Pizza" },
+        { "qty": 1, "label": "Drippin Special Burger" },
+        { "qty": 1, "label": "Grilled Chicken Cheese Sandwich" },
+        { "qty": 1, "label": "Sweet and Chilli Wrap" },
+        { "qty": 1, "label": "Regular Fries" },
+        { "qty": 1, "label": "1 Litre Drink", "choose": "soft-drink" }
+      ]
+    },
+    {
+      "id": "deal-13", "number": 13, "name": "Mix & Munch", "price": 2049, "image": "/images/deals/deal-13.webp",
+      "contents": [
+        { "qty": 1, "label": "Zinger Burger" },
+        { "qty": 1, "label": "Patty Burger" },
+        { "qty": 1, "label": "Alfredo Pasta" },
+        { "qty": 1, "label": "Regular Fries" },
+        { "qty": 2, "label": "Mint Margarita" },
+        { "qty": 1, "label": "Oreo Shake" }
+      ]
+    },
+    {
+      "id": "deal-14", "number": 14, "name": "Crunch Mode", "price": 1449, "image": "/images/deals/deal-14.webp",
+      "contents": [
+        { "qty": 1, "label": "Americano Beef Burger" },
+        { "qty": 1, "label": "Chicken Strips (5 pcs)" },
+        { "qty": 1, "label": "Loaded Fries" },
+        { "qty": 1, "label": "Nuggets (6 pcs)" },
+        { "qty": 1, "label": "1 Litre Drink", "choose": "soft-drink" }
+      ]
+    },
+    {
+      "id": "deal-15", "number": 15, "name": "Fire & Crunch", "price": 1999, "image": "/images/deals/deal-15.webp",
+      "contents": [
+        { "qty": 1, "label": "Crunchy Wrap" },
+        { "qty": 1, "label": "Special Cheese Balls (6 pcs)" },
+        { "qty": 1, "label": "Masala Fries" },
+        { "qty": 1, "label": "Buffalo Wings (6 pcs)" },
+        { "qty": 1, "label": "Lemon Fizz" },
+        { "qty": 1, "label": "Lemonata" }
+      ]
+    },
+    {
+      "id": "deal-16", "number": 16, "name": "The Fam Jam", "price": 4399, "image": "/images/deals/deal-16.webp",
+      "contents": [
+        { "qty": 1, "label": "Pizza (4 slices)" },
+        { "qty": 1, "label": "Zinger Burger" },
+        { "qty": 1, "label": "Drippin Special Burger" },
+        { "qty": 2, "label": "Malai Boti Roll (4 pcs)" },
+        { "qty": 1, "label": "Sandwich (4 pcs)" },
+        { "qty": 1, "label": "Grilled Chicken Wings (6 pcs)" },
+        { "qty": 1, "label": "Regular Fries" },
+        { "qty": 3, "label": "Dip Sauce" },
+        { "qty": 1, "label": "Hot Lava Cake + Ice Cream" },
+        { "qty": 2, "label": "Mint Margarita" },
+        { "qty": 1, "label": "Oreo Shake" },
+        { "qty": 1, "label": "Chocolate Shake" }
+      ]
+    }
+  ],
+  "softDrinks": {
+    "_notes": "Deal drink flavours are not listed on the menu. Placeholder options until the owners confirm.",
+    "options": ["Pepsi", "7Up", "Mirinda", "Coca-Cola", "Sprite", "Fanta"]
+  },
+  "openQuestions": [
+    "Deal 12 shares the name 'The Big Drip' with deal 1.",
+    "Which pizza flavours can be chosen in deals (classic only, or any)? Assumed classic unless the deal says premium or names a flavour.",
+    "Which soft drinks are available in deals.",
+    "Are deal-only items (nuggets, wings, shakes, mocktails, lava cake, etc.) sold separately, and at what price?",
+    "Do Cairo dips apply to Sando and Croissant sandwiches too? Currently only pockets/wraps and the Cairo Combo.",
+    "Confirm 'Lemonata' spelling in deal 15.",
+    "Mushroom Burger and Chmicow Beef Burger have very similar descriptions; confirm.",
+    "Address, WhatsApp number, phone, opening hours, delivery areas and fees."
+  ]
+}
