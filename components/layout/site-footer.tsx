@@ -41,8 +41,7 @@ function SiteFooter() {
   return (
     <footer
       data-slot="site-footer"
-      // The end tone is the page vignette's edge colour from globals.css.
-      className="bg-linear-to-b from-transparent to-[color-mix(in_oklab,black_55%,var(--background))]/70 pt-12 pb-10 md:pt-16"
+      className="bg-linear-to-b from-transparent to-black/50 pt-12 pb-10 md:pt-16"
     >
       <GoldRule />
       <div className="mx-auto mt-12 max-w-6xl px-4 sm:px-6 md:mt-16">
