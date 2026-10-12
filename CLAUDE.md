@@ -194,6 +194,10 @@ Starting colour tokens:
 - Keep pricing and cart logic in plain functions, separate from components.
 - Server components by default. Use `"use client"` only where interactivity requires it.
 - Keep components small and in sensible folders. Don't create new top-level folders without a reason.
+- Shared components stay in `components/<purpose>/` (like `components/brand/` and `components/layout/`). shadcn primitives stay in `components/ui/`.
+- A component used by only one route lives next to that route's `page.tsx` (e.g. `app/menu/category-bar.tsx`). If another route starts using it, move it to `components/<purpose>/` and update the imports in the same change.
+- `page.tsx` mainly reads data through `lib/menu.ts` and arranges components. No large blocks of UI, form logic or interactive state directly in it. Split pages into small, focused components with one clear responsibility.
+- Put client interactivity in the smallest component that needs it, so `page.tsx` stays a server component.
 - Accessible labels on icon buttons, visible focus states, tap targets at least 44px.
 
 ## 12. Workflow rules
