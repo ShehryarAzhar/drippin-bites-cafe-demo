@@ -11,7 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - The restaurant does dine-in, takeaway and delivery, and currently takes orders manually on WhatsApp.
 - Main selling point: the **Cairo Crunch** Egyptian street-food line (Hawawshi, Ful, Tamaya, Chicken Faroge). Everything on the site pushes Cairo Crunch first.
 - Audience: mostly mobile users arriving from Instagram. Design **mobile-first**.
-- Current state: a `create-next-app` scaffold. `app/page.tsx` and the `metadata` in `app/layout.tsx` are stock placeholders; `components/ui/button.tsx` is the only component. Menu data, images and logos are already in place.
+- Current state: a cleaned `create-next-app` scaffold (spec 01). `app/page.tsx` is a minimal holding page showing only the cafe name; the `metadata` in `app/layout.tsx` is still the stock placeholder; `components/ui/button.tsx` is the only component. Menu data, images and logos are already in place.
 
 ## 2. Tech stack and commands
 
@@ -99,7 +99,7 @@ Structure (top-level keys; `_notes` fields are comments, not data):
 - Collect: order type (delivery / takeaway / dine-in), name, phone, address (delivery only), optional notes.
 - Phone: Pakistani format. Accept `03xxxxxxxxx`, normalise to `923xxxxxxxxx`.
 - Validate with simple inline errors, following section 13.
-- The WhatsApp number comes from env var `NEXT_PUBLIC_WHATSAPP_NUMBER`, not from `restaurant.whatsapp`. Create `.env.example` containing it; `.gitignore` currently ignores `.env*`, so add a `!.env.example` exception. If the variable is missing, show a clear message instead of a broken link.
+- The WhatsApp number comes from env var `NEXT_PUBLIC_WHATSAPP_NUMBER`, not from `restaurant.whatsapp`. `.env.example` documents it (committed through a `!.env.example` exception to the `.env*` rule in `.gitignore`); copy it to `.env.local` and fill in the value. If the variable is missing, show a clear message instead of a broken link.
 - Open `https://wa.me/<number>?text=<encoded message>`. The message is plain text, readable on a phone, in this order:
   1. header with the restaurant name
   2. order type
@@ -180,8 +180,6 @@ Starting colour tokens:
   - `logo-mark.svg`: the icon; `app/icon.svg` is an identical copy used as the favicon
 
   All are for **dark backgrounds only** (the "DRIPPIN" text is cream `#F3E6CC`).
-- `public/{file,globe,next,vercel,window}.svg` and `app/favicon.ico` are create-next-app leftovers, not brand assets.
-
 ## 10. Content conventions
 
 - Use the spelling in `menu.json`. It is already corrected from the printed menu.
@@ -219,7 +217,7 @@ Each feature gets one numbered spec in `.claude/specs/`. Build in this order.
 
 | # | Spec | Scope | Depends on | Status |
 |---|------|-------|------------|--------|
-| 01 | `01-project-setup` | Remove scaffold leftovers (placeholder page, unused `public/*.svg`, `app/favicon.ico`); add `.env.example` and the `.gitignore` exception; lint and build pass. Scaffold, shadcn init and form libraries already exist. | — | Stub |
+| 01 | `01-project-setup` | Remove scaffold leftovers (placeholder page, unused `public/*.svg`, `app/favicon.ico`); add `.env.example` and the `.gitignore` exception; lint and build pass. Scaffold, shadcn init and form libraries already exist. | — | Implemented |
 | 02 | `02-brand-theme` | Brand colour tokens as shadcn CSS variables, dark-only, display + body fonts, shared brand primitives (two-colour heading, gold rule with diamond, pill label). | 01 | Stub |
 | 03 | `03-menu-data-helpers` | `types/menu.ts`, typed access to `menu.json`, lookups (size labels, add-on groups, image fallback, tags), TBD-safe values, `Rs. 1,599` formatter. | 01 | Stub |
 | 04 | `04-site-layout` | Root layout, header with logo, footer with TBD-safe contact details, favicon, `metadata`. Logos and `app/icon.svg` already exist. | 02, 03 | Stub |
