@@ -1,13 +1,12 @@
 import { BrandHeading } from "@/components/brand/brand-heading"
 import { GoldRule } from "@/components/brand/gold-rule"
 import { PillLabel } from "@/components/brand/pill-label"
+import { ComboCard } from "@/components/menu/combo-card"
 import { ItemCard } from "@/components/menu/item-card"
 import { splitName } from "@/lib/format"
 import { getCategoryCombos, groupItems } from "@/lib/menu"
 import { cn } from "@/lib/utils"
 import type { Category, Item, ItemGroup } from "@/types/menu"
-
-import { ComboCard } from "./combo-card"
 
 const groupLabels: Record<ItemGroup, string> = {
   sides: "Sides",

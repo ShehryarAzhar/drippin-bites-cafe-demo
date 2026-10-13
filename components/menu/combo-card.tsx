@@ -1,6 +1,7 @@
 import { useId } from "react"
 
 import { BrandHeading } from "@/components/brand/brand-heading"
+import { DotGrid } from "@/components/brand/corner-ornaments"
 import { PillLabel } from "@/components/brand/pill-label"
 import { AddButton } from "@/components/customizer/add-button"
 import { PriceTag } from "@/components/menu/price-tag"
@@ -38,10 +39,7 @@ function ComboCard({ combo }: { combo: Combo }) {
             aria-hidden="true"
             className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_90%_at_0%_50%,color-mix(in_oklab,var(--gold)_14%,transparent)_0%,transparent_100%)]"
           />
-          <span
-            aria-hidden="true"
-            className="absolute top-4 right-4 -z-10 size-20 bg-[radial-gradient(circle,color-mix(in_oklab,var(--gold)_55%,transparent)_1px,transparent_1.5px)] bg-size-[10px_10px] mask-[linear-gradient(to_bottom_left,black,transparent_75%)]"
-          />
+          <DotGrid className="absolute top-4 right-4 -z-10 size-20 mask-[linear-gradient(to_bottom_left,black,transparent_75%)]" />
           <PillLabel>Combo</PillLabel>
           <BrandHeading
             as="h3"

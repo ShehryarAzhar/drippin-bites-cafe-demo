@@ -60,6 +60,13 @@ export function getVariantType(
   return item.variantType ?? category.variantType
 }
 
+/** The items sold in two versions (Authentic / Lahori Twist), in file order. */
+export function getVersionItems(category: Category): Item[] {
+  return category.items.filter(
+    (item) => getVariantType(item, category) === "version",
+  )
+}
+
 export function getVariant(item: Item, variantId: string): Variant | undefined {
   return item.variants.find((v) => v.id === variantId)
 }

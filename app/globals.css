@@ -134,6 +134,29 @@
   }
 }
 
+/* The home hero's entrance, once on load. The items are staggered with a
+   delay, which the reduced-motion rule at the end of this file does not
+   shorten, so both are opted out here instead. */
+@utility hero-rise {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: reveal-up 300ms ease-out both;
+  }
+}
+
+/* The hero photo only settles in scale: it is the largest paint, so it never
+   starts invisible. */
+@utility hero-settle {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: hero-settle 400ms ease-out both;
+  }
+}
+
+@keyframes hero-settle {
+  from {
+    scale: 0.96;
+  }
+}
+
 /* The cart badge pops once whenever its count changes. */
 @utility badge-pop {
   animation: badge-pop 250ms ease-out;

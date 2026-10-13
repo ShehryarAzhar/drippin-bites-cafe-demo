@@ -1,6 +1,7 @@
 import { useId } from "react"
 
 import { BrandHeading } from "@/components/brand/brand-heading"
+import { DotGrid } from "@/components/brand/corner-ornaments"
 import { PillLabel } from "@/components/brand/pill-label"
 import { AddButton } from "@/components/customizer/add-button"
 import { PriceTag } from "@/components/menu/price-tag"
@@ -38,10 +39,7 @@ function DealCard({ deal }: { deal: Deal }) {
             aria-hidden="true"
             className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_90%_70%_at_50%_0%,color-mix(in_oklab,var(--gold)_14%,transparent)_0%,transparent_100%)]"
           />
-          <span
-            aria-hidden="true"
-            className="absolute top-4 right-4 -z-10 size-20 bg-[radial-gradient(circle,color-mix(in_oklab,var(--gold)_55%,transparent)_1px,transparent_1.5px)] bg-size-[10px_10px] mask-[linear-gradient(to_bottom_left,black,transparent_75%)]"
-          />
+          <DotGrid className="absolute top-4 right-4 -z-10 size-20 mask-[linear-gradient(to_bottom_left,black,transparent_75%)]" />
           <PillLabel className="h-7 px-3.5 sm:text-xs sm:tracking-[0.18em]">
             Deal {deal.number}
           </PillLabel>

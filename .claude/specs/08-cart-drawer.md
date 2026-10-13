@@ -176,7 +176,7 @@ Files to create:
 Files to modify:
 
 - `components/layout/site-header.tsx`: render the cart button after the Menu link and drop the "spec 08" comment. It stays a server component.
-- `app/layout.tsx`: mount the drawer and the mobile bar once, beside `CartHydration`. Nothing else.
+- `app/layout.tsx`: mount the drawer and the mobile bar once, beside `CartHydration`. Nothing else. *(`CartHydration` was removed on 2026-10-14; the store loads itself. See spec 07's Loading note.)*
 - `app/globals.css`: only if needed for the badge-pop keyframe or a bar-height variable; no new colour tokens.
 - `CLAUDE.md`: after verification, set spec 08 to `Implemented`, update the "Current state" bullet in section 1 ("no UI reads the cart yet") and the cart-button sentence in section 7.
 
