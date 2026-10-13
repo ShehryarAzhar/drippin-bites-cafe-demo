@@ -7,6 +7,7 @@ import type {
   ComboSlot,
   Deal,
   DealPizzaLine,
+  DealSoftDrinkLine,
   Item,
   ItemRef,
   Menu,
@@ -210,6 +211,74 @@ export function getDealPizzaOptions(line: DealPizzaLine): ResolvedItem[] {
 
 export function getSoftDrinkOptions(): string[] {
   return menu.softDrinks.options
+}
+
+/** One thing a deal's `choose` line can be filled with. */
+export type DealOption = {
+  /** What the cart stores: a pizza's item id, or a soft drink flavour. */
+  id: string
+  name: string
+  veg: boolean
+}
+
+/** One selection the customer owes: a `qty` 2 line gives two of these. */
+export type DealStep = {
+  /** Position of the line in the deal's `contents`. */
+  index: number
+  /** Which of the line's `qty` selections this is, from 1. */
+  position: number
+  line: DealPizzaLine | DealSoftDrinkLine
+  options: DealOption[]
+}
+
+export type DealPlan = {
+  steps: DealStep[]
+  /** Lines with one option only, already chosen, by `contents` index. */
+  auto: Record<number, DealOption>
+}
+
+function getDealLineOptions(
+  line: DealPizzaLine | DealSoftDrinkLine,
+): DealOption[] {
+  if (line.choose === "pizza") {
+    return getDealPizzaOptions(line).map(({ item, variant }) => ({
+      id: item.id,
+      name: item.name,
+      veg: getTags(item, variant).includes("veg"),
+    }))
+  }
+  return getSoftDrinkOptions().map((flavour) => ({
+    id: flavour,
+    name: flavour,
+    veg: false,
+  }))
+}
+
+/**
+ * What a deal asks of the customer, in `contents` order. A line with a single
+ * option is chosen for them; undefined when a line has no option at all, so
+ * the deal cannot be built.
+ */
+export function getDealSteps(deal: Deal): DealPlan | undefined {
+  const plan: DealPlan = { steps: [], auto: {} }
+  for (const [index, line] of deal.contents.entries()) {
+    if (!line.choose) continue
+    const options = getDealLineOptions(line)
+    if (options.length === 0) return undefined
+    if (options.length === 1) {
+      plan.auto[index] = options[0]
+      continue
+    }
+    for (let position = 1; position <= line.qty; position++) {
+      plan.steps.push({ index, position, line, options })
+    }
+  }
+  return plan
+}
+
+/** Deals the customiser can take into the cart, in file order. */
+export function getBuildableDeals(): Deal[] {
+  return menu.deals.filter((deal) => getDealSteps(deal) !== undefined)
 }
 
 /** Contact values with the "TBD" placeholder removed. */

@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 
 import { BrandHeading } from "@/components/brand/brand-heading"
 import { PillLabel } from "@/components/brand/pill-label"
-import { getFeaturedCategory, menu } from "@/lib/menu"
+import { getBuildableDeals, getFeaturedCategory, menu } from "@/lib/menu"
 import { cn } from "@/lib/utils"
 
 import { CategoryBar, type CategoryBarEntry } from "./category-bar"
@@ -22,7 +22,8 @@ export default function MenuPage() {
   const categories = menu.categories.filter(
     (category) => category.items.length > 0
   )
-  const hasDeals = menu.deals.length > 0
+  const deals = getBuildableDeals()
+  const hasDeals = deals.length > 0
 
   const entries: CategoryBarEntry[] = categories.map((category) => ({
     id: category.id,
@@ -54,7 +55,7 @@ export default function MenuPage() {
             featured={category.id === featured?.id}
           />
         ))}
-        {hasDeals ? <DealsSection deals={menu.deals} /> : null}
+        {hasDeals ? <DealsSection deals={deals} /> : null}
       </div>
     </>
   )
