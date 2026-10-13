@@ -52,6 +52,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
+      // Keeps route changes instant now that html scrolls smoothly (globals.css).
+      data-scroll-behavior="smooth"
       className={cn("dark h-full antialiased font-sans", anton.variable, figtree.variable)}
     >
       <body className="min-h-full flex flex-col">
