@@ -2,6 +2,7 @@ import { BrandHeading } from "@/components/brand/brand-heading"
 import { GoldRule } from "@/components/brand/gold-rule"
 import { PillLabel } from "@/components/brand/pill-label"
 import { ItemCard } from "@/components/menu/item-card"
+import { splitName } from "@/lib/format"
 import { groupItems } from "@/lib/menu"
 import { cn } from "@/lib/utils"
 import type { Category, Item, ItemGroup } from "@/types/menu"
@@ -15,13 +16,6 @@ const groupOrder: ItemGroup[] = ["sides", "drinks"]
 // Three-up at most, inside the 72rem page width.
 const stackedSizes =
   "(min-width: 72rem) 368px, (min-width: 64rem) 33vw, (min-width: 40rem) 50vw, 100vw"
-
-/** Splits a name for the two-colour heading: the last word is the gold line. */
-function splitName(name: string) {
-  const lastSpace = name.lastIndexOf(" ")
-  if (lastSpace === -1) return { lead: name }
-  return { lead: name.slice(0, lastSpace), accent: name.slice(lastSpace + 1) }
-}
 
 function RowGrid({
   items,

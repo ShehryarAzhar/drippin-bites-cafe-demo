@@ -4,6 +4,7 @@ import "./globals.css";
 import { CartDrawer } from "@/components/cart/cart-drawer";
 import { CartHydration } from "@/components/cart/cart-hydration";
 import { MobileCartBar } from "@/components/cart/mobile-cart-bar";
+import { CustomizerRoot } from "@/components/customizer/customizer-root";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { getFeaturedCategory, menu } from "@/lib/menu";
@@ -74,6 +75,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SiteFooter />
         <MobileCartBar />
         <CartDrawer />
+        <CustomizerRoot />
         <CartHydration />
       </body>
     </html>
