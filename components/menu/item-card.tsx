@@ -64,7 +64,7 @@ function ItemCard({
 }: ItemCardProps) {
   const headingId = useId()
   const isRow = layout === "row"
-  const canAdd = canCustomize(item)
+  const canAdd = canCustomize(item, category)
   const shownVariant = variant ?? getDefaultVariant(item)
 
   const title = variant ? getDisplayName(item, variant) : item.name

@@ -26,7 +26,8 @@ function CustomizerRoot() {
   // An id the menu no longer has, or an item still waiting for its picker,
   // never opens the sheet.
   const found = target ? findItem(target.itemId) : undefined
-  const resolved = found && canCustomize(found.item) ? found : undefined
+  const resolved =
+    found && canCustomize(found.item, found.category) ? found : undefined
 
   return (
     <>
