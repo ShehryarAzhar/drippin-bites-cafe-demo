@@ -28,6 +28,8 @@ type BrandHeadingProps = VariantProps<typeof brandHeadingVariants> & {
   lead: ReactNode
   /** Optional second line, gold. */
   accent?: ReactNode
+  /** Lets a section point at its heading with `aria-labelledby`. */
+  id?: string
   className?: string
 }
 
@@ -37,10 +39,12 @@ function BrandHeading({
   align,
   lead,
   accent,
+  id,
   className,
 }: BrandHeadingProps) {
   return (
     <Tag
+      id={id}
       data-slot="brand-heading"
       className={cn(brandHeadingVariants({ size, align }), className)}
     >

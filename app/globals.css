@@ -73,6 +73,8 @@
 
   /* Height of the sticky site header; anything stuck below it offsets by this. */
   --header-height: 4rem;
+  /* Height of the menu page's sticky category bar, which sits under the header. */
+  --category-bar-height: 3.5rem;
 }
 
 @media (width >= 40rem) {
@@ -112,6 +114,26 @@
   font-size: clamp(1.5rem, 1.4rem + 0.4vw, 1.75rem);
 }
 
+/* Section headers ease in as they scroll into view. The animation is tied to
+   scroll position, so the reduced-motion rule at the end of this file cannot
+   shorten it; it is opted out here instead. */
+@utility reveal-on-scroll {
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 100%;
+    }
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    translate: 0 0.75rem;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -121,6 +143,8 @@
     color-scheme: dark;
     /* Keeps anchor targets clear of the sticky header. */
     scroll-padding-top: var(--header-height);
+    /* In-page jumps only; layout.tsx opts route changes out. */
+    scroll-behavior: smooth;
   }
   body {
     @apply text-foreground;
