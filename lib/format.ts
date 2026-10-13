@@ -8,6 +8,13 @@ export function formatPrice(amount: number): string {
   return `Rs. ${priceFormatter.format(amount)}`
 }
 
+/** Splits a name for the two-colour heading: the last word is the gold line. */
+export function splitName(name: string): { lead: string; accent?: string } {
+  const lastSpace = name.lastIndexOf(" ")
+  if (lastSpace === -1) return { lead: name }
+  return { lead: name.slice(0, lastSpace), accent: name.slice(lastSpace + 1) }
+}
+
 /** Returns the trimmed value, or undefined when it is empty or the "TBD" placeholder. */
 export function tbdSafe(value: string | undefined): string | undefined {
   const trimmed = value?.trim()

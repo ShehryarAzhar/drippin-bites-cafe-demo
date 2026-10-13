@@ -1,5 +1,6 @@
 import { useId } from "react"
 
+import { AddButton } from "@/components/customizer/add-button"
 import { ItemTags } from "@/components/menu/item-tags"
 import { PriceTag } from "@/components/menu/price-tag"
 import { ProductImage } from "@/components/menu/product-image"
@@ -12,6 +13,7 @@ import {
   getTags,
   getVariantLabel,
 } from "@/lib/menu"
+import { canCustomize } from "@/lib/customizer"
 import { cn } from "@/lib/utils"
 import type { Category, Item, Tag, Variant } from "@/types/menu"
 
@@ -46,7 +48,10 @@ type ItemCardProps = {
   className?: string
 }
 
-/** Display-only menu card. Not interactive. */
+/**
+ * Menu card. Items the customiser can finish carry an Add button whose tap
+ * area covers the whole card; the rest are display-only.
+ */
 function ItemCard({
   item,
   category,
@@ -59,6 +64,7 @@ function ItemCard({
 }: ItemCardProps) {
   const headingId = useId()
   const isRow = layout === "row"
+  const canAdd = canCustomize(item)
   const shownVariant = variant ?? getDefaultVariant(item)
 
   const title = variant ? getDisplayName(item, variant) : item.name
@@ -76,8 +82,12 @@ function ItemCard({
       data-layout={layout}
       aria-labelledby={headingId}
       className={cn(
-        "flex h-full overflow-hidden rounded-xl bg-card text-card-foreground shadow-xl ring-1 shadow-black/40 ring-gold/15",
+        // Positioned and isolated: the Add button stretches its tap area to
+        // this box, above everything else in the card.
+        "relative isolate flex h-full overflow-hidden rounded-xl bg-card text-card-foreground shadow-xl ring-1 shadow-black/40 ring-gold/15",
         !isRow && "flex-col",
+        canAdd &&
+          "transition-[translate,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-black/60 active:translate-y-0",
         className
       )}
     >
@@ -90,23 +100,24 @@ function ItemCard({
           isRow ? "w-28 shrink-0 self-stretch sm:w-32" : "aspect-4/3 w-full"
         }
       />
+      {/* Stacked: the tags sit centred on the stage/body seam, out of the text
+          flow so titles line up across cards with and without tags. */}
+      {isRow ? null : (
+        <div className="relative h-0">
+          <ItemTags
+            tags={tags}
+            className="absolute top-0 left-4 z-10 -translate-y-1/2 sm:left-5"
+          />
+        </div>
+      )}
       <div
         className={cn(
-          "relative flex min-w-0 flex-1 flex-col",
+          "flex min-w-0 flex-1 flex-col",
           isRow ? "p-3 sm:p-4" : "p-4 pt-5 sm:p-5 sm:pt-6"
         )}
       >
         <div className="flex flex-1 flex-col gap-1.5 pb-3">
-          <ItemTags
-            tags={tags}
-            // Stacked: centred on the stage/body seam, out of the text flow so
-            // titles line up across cards with and without tags.
-            className={
-              isRow
-                ? "mb-0.5"
-                : "absolute top-0 left-4 z-10 -translate-y-1/2 sm:left-5"
-            }
-          />
+          {isRow ? <ItemTags tags={tags} className="mb-0.5" /> : null}
           <Heading
             id={headingId}
             className="heading-card line-clamp-3 wrap-break-word"
@@ -132,12 +143,14 @@ function ItemCard({
             <p className={cn(smallText, "font-medium")}>{options}</p>
           ) : null}
         </div>
-        {/* Spec 09 adds its control at the end of this row. */}
         <div className="flex items-center justify-between gap-3 border-t border-card-foreground/10 pt-3">
           <PriceTag
             amount={variant ? variant.price : lowest.price}
             from={!variant && lowest.hasMultiplePrices}
           />
+          {canAdd ? (
+            <AddButton itemId={item.id} name={title} layout={layout} />
+          ) : null}
         </div>
       </div>
     </article>

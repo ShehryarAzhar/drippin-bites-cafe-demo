@@ -194,6 +194,17 @@ export function addToLines(
   ]
 }
 
+/** How many of exactly this selection the cart already holds. */
+export function getQuantityInCart(
+  lines: CartLine[],
+  selection: CartSelection,
+): number {
+  const normalized = normalizeSelection(selection)
+  if (!normalized) return 0
+  const key = getLineKey(normalized)
+  return lines.find((line) => line.key === key)?.quantity ?? 0
+}
+
 /** Below 1 removes the line; above the maximum holds it there. */
 export function setLineQuantity(
   lines: CartLine[],
