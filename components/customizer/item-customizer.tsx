@@ -2,20 +2,29 @@
 
 import { useEffect, useRef, useState } from "react"
 
+import { AddOnPicker } from "@/components/customizer/add-on-picker"
+import type { AddOnStatus } from "@/components/customizer/add-on-picker"
 import { BrandHeading } from "@/components/brand/brand-heading"
 import { CustomizerPanel } from "@/components/customizer/customizer-shell"
 import { SizePicker } from "@/components/customizer/size-picker"
 import { VersionToggle } from "@/components/customizer/version-toggle"
 import { ItemTags } from "@/components/menu/item-tags"
 import { SheetDescription, SheetTitle } from "@/components/ui/sheet"
+import { formatFreeAllowance, getAddOnRule } from "@/lib/cart/copy"
 import { getQuantityInCart, MAX_LINE_QUANTITY } from "@/lib/cart/line"
-import { getSubtotal, getUnitPrice } from "@/lib/cart/pricing"
+import {
+  getSubtotal,
+  getUnitPrice,
+  priceAddOnGroup,
+  priceAddOns,
+} from "@/lib/cart/pricing"
 import { formatPrice, splitName } from "@/lib/format"
 import {
   getDefaultVariant,
   getDisplayDescription,
   getDisplayName,
   getImage,
+  getItemAddOnGroups,
   getTags,
   getVariant,
   getVariantLabel,
@@ -24,8 +33,8 @@ import {
 import { cn } from "@/lib/utils"
 import { useCartStore } from "@/store/cart"
 import { useCustomizerStore } from "@/store/customizer"
-import type { ItemSelection } from "@/types/cart"
-import type { Category, Item, Variant } from "@/types/menu"
+import type { AddOnSelection, ItemSelection } from "@/types/cart"
+import type { AddOnGroup, Category, Item, Variant } from "@/types/menu"
 
 /** How long "Added" stays on the button before the sheet closes. */
 const ADDED_PAUSE_MS = 600
@@ -37,14 +46,43 @@ type ItemCustomizerProps = {
   onAdded: (message: string) => void
 }
 
-function toSelection(item: Item, variant: Variant): ItemSelection {
-  return { kind: "item", itemId: item.id, variantId: variant.id, addOns: [] }
+/** Chosen option ids by add-on group id. */
+type ChosenAddOns = Record<string, string[]>
+
+function toSelection(
+  item: Item,
+  variant: Variant,
+  groups: AddOnGroup[],
+  chosen: ChosenAddOns
+): ItemSelection {
+  // A group with nothing chosen is left out, as in a line with no add-ons.
+  const addOns: AddOnSelection[] = groups.flatMap((group) => {
+    const optionIds = chosen[group.id] ?? []
+    return optionIds.length > 0 ? [{ groupId: group.id, optionIds }] : []
+  })
+  return { kind: "item", itemId: item.id, variantId: variant.id, addOns }
+}
+
+/** The end of a group's heading row: its hint, or what the chosen ones cost. */
+function getAddOnStatus(group: AddOnGroup, optionIds: string[]): AddOnStatus {
+  if (optionIds.length === 0) {
+    return group.freeCount > 0
+      ? { text: formatFreeAllowance(group.freeCount), tone: "accent" }
+      : { text: "Optional", tone: "muted" }
+  }
+  const cost = priceAddOnGroup(group, optionIds).reduce(
+    (sum, addOn) => sum + addOn.price,
+    0
+  )
+  return cost === 0
+    ? { text: "Free", tone: "accent" }
+    : { text: `+ ${formatPrice(cost)}`, tone: "plain" }
 }
 
 /**
- * One item in the customiser: its size or version where it has them, quantity,
- * live total and Add to cart. Mounted afresh on every open, so it always
- * starts at 1, with no size chosen or on the first version.
+ * One item in the customiser: its size or version where it has them, its dips,
+ * quantity, live total and Add to cart. Mounted afresh on every open, so it
+ * always starts at 1, with no size or dips chosen, or on the first version.
  */
 function ItemCustomizer({ item, category, onAdded }: ItemCustomizerProps) {
   const lines = useCartStore((state) => state.lines)
@@ -55,12 +93,17 @@ function ItemCustomizer({ item, category, onAdded }: ItemCustomizerProps) {
   const variantType = getVariantType(item, category)
   const sized = variantType === "size"
   const versioned = variantType === "version"
+  // A group with nothing to choose from gets no section.
+  const groups = getItemAddOnGroups(item, category).filter(
+    (group) => group.options.length > 0 && group.maxSelect >= 1
+  )
 
   const [quantity, setQuantity] = useState(1)
   // A size has to be chosen; anything else starts on its first variant.
   const [variantId, setVariantId] = useState<string | null>(() =>
     sized ? null : getDefaultVariant(item).id
   )
+  const [chosenAddOns, setChosenAddOns] = useState<ChosenAddOns>({})
   const [status, setStatus] = useState<"idle" | "added" | "refused">("idle")
   const closeTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
   const sizeRef = useRef<HTMLDivElement>(null)
@@ -72,7 +115,9 @@ function ItemCustomizer({ item, category, onAdded }: ItemCustomizerProps) {
   const variant = variantId ? getVariant(item, variantId) : undefined
   const name = getDisplayName(item, variant)
   const description = getDisplayDescription(item, variant)
-  const selection = variant ? toSelection(item, variant) : undefined
+  const selection = variant
+    ? toSelection(item, variant, groups, chosenAddOns)
+    : undefined
   const unitPrice = selection ? getUnitPrice(selection) : undefined
   // A line stops at the maximum, so only the room left can be added.
   const remaining = selection
@@ -81,15 +126,32 @@ function ItemCustomizer({ item, category, onAdded }: ItemCustomizerProps) {
   const added = status === "added"
   const full = !added && remaining < 1
 
+  // Each size, version or set of dips is its own cart line, with its own room
+  // left, so every change of choice goes through here.
+  const applyChoice = (
+    nextVariant: Variant | undefined,
+    nextAddOns: ChosenAddOns
+  ) => {
+    setVariantId(nextVariant?.id ?? null)
+    setChosenAddOns(nextAddOns)
+    setStatus("idle")
+    if (!nextVariant) return
+    const room =
+      MAX_LINE_QUANTITY -
+      getQuantityInCart(
+        lines,
+        toSelection(item, nextVariant, groups, nextAddOns)
+      )
+    setQuantity((q) => Math.max(1, Math.min(q, room)))
+  }
+
   const chooseVariant = (id: string) => {
     const next = getVariant(item, id)
-    if (!next) return
-    // Each size or version is its own cart line, with its own room left.
-    const room =
-      MAX_LINE_QUANTITY - getQuantityInCart(lines, toSelection(item, next))
-    setVariantId(id)
-    setQuantity((q) => Math.max(1, Math.min(q, room)))
-    setStatus("idle")
+    if (next) applyChoice(next, chosenAddOns)
+  }
+
+  const chooseAddOns = (groupId: string, optionIds: string[]) => {
+    applyChoice(variant, { ...chosenAddOns, [groupId]: optionIds })
   }
 
   const showSizes = () => {
@@ -107,9 +169,13 @@ function ItemCustomizer({ item, category, onAdded }: ItemCustomizerProps) {
     }
     setStatus("added")
     const subtotal = getSubtotal(useCartStore.getState().lines)
-    const label = variantType
-      ? `${name} (${getVariantLabel(item, category, variant)})`
-      : name
+    const addOnNames = priceAddOns(selection).map((a) => a.option.name)
+    const label = [
+      variantType
+        ? `${name} (${getVariantLabel(item, category, variant)})`
+        : name,
+      ...(addOnNames.length > 0 ? [`with ${addOnNames.join(", ")}`] : []),
+    ].join(" ")
     const message = `${quantity} × ${label} added to cart. Subtotal ${formatPrice(subtotal)}.`
     closeTimer.current = setTimeout(() => {
       close()
@@ -193,33 +259,61 @@ function ItemCustomizer({ item, category, onAdded }: ItemCustomizerProps) {
         ) : null}
         {description ? <SheetDescription>{description}</SheetDescription> : null}
       </div>
-      {sized ? (
-        <>
-          <span
-            aria-hidden="true"
-            className="my-1 h-px shrink-0 bg-linear-to-r from-transparent via-primary/60 to-transparent"
-          />
-          {/* The tiles are the price list, so no unit price is printed. Held
-              still while "Added" shows, so the size announced is the one
-              added. */}
-          <div ref={sizeRef} inert={added}>
-            <SizePicker
-              options={item.variants.map((v) => ({
-                id: v.id,
-                label: getVariantLabel(item, category, v),
-                price: formatPrice(v.price),
-              }))}
-              value={variant?.id ?? null}
-              onChange={chooseVariant}
-            />
-          </div>
-        </>
-      ) : !versioned && unitPrice !== undefined ? (
+      {/* The dish's own price; the button carries the total with dips. */}
+      {!sized && !versioned && variant ? (
         <p className="text-lg font-bold tabular-nums">
-          {formatPrice(unitPrice)}
+          {formatPrice(variant.price)}
         </p>
       ) : null}
-      {/* Dips pickers go here, under a fading gold rule. */}
+      {sized || groups.length > 0 ? (
+        <span
+          aria-hidden="true"
+          className="my-1 h-px shrink-0 bg-linear-to-r from-transparent via-primary/60 to-transparent"
+        />
+      ) : null}
+      {sized ? (
+        // The tiles are the price list, so no unit price is printed. Held
+        // still while "Added" shows, so the size announced is the one added.
+        <div ref={sizeRef} inert={added}>
+          <SizePicker
+            options={item.variants.map((v) => ({
+              id: v.id,
+              label: getVariantLabel(item, category, v),
+              price: formatPrice(v.price),
+            }))}
+            value={variant?.id ?? null}
+            onChange={chooseVariant}
+          />
+        </div>
+      ) : null}
+      {groups.length > 0 ? (
+        // Outside the keyed block above, so a change of version leaves the
+        // tiles where they are. Held still while "Added" shows.
+        <div inert={added} className="flex flex-col gap-5">
+          {groups.map((group) => {
+            const optionIds = chosenAddOns[group.id] ?? []
+            return (
+              <AddOnPicker
+                key={group.id}
+                title={group.name}
+                rule={getAddOnRule(group)}
+                status={getAddOnStatus(group, optionIds)}
+                options={group.options.map((option) => ({
+                  id: option.id,
+                  name: option.name,
+                  price:
+                    option.price !== undefined
+                      ? formatPrice(option.price)
+                      : undefined,
+                }))}
+                value={optionIds}
+                max={group.maxSelect}
+                onChange={(ids) => chooseAddOns(group.id, ids)}
+              />
+            )
+          })}
+        </div>
+      ) : null}
     </CustomizerPanel>
   )
 }
