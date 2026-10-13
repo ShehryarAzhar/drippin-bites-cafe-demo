@@ -2,6 +2,7 @@ import { UtensilsCrossed } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
+import { CartButton } from "@/components/cart/cart-button"
 import { NavLink } from "@/components/layout/nav-link"
 import { buttonVariants } from "@/components/ui/button"
 import { menu } from "@/lib/menu"
@@ -27,7 +28,6 @@ function SiteHeader() {
             className="h-8.5 w-auto sm:h-10"
           />
         </Link>
-        {/* The cart button (spec 08) joins this group after the Menu link. */}
         <nav aria-label="Main" className="flex items-center gap-2">
           <NavLink
             href="/menu"
@@ -39,6 +39,7 @@ function SiteHeader() {
             <UtensilsCrossed aria-hidden="true" className="hidden sm:block" />
             Menu
           </NavLink>
+          <CartButton />
         </nav>
       </div>
       {/* Bottom edge: the GoldRule line without its diamond. */}
