@@ -6,11 +6,16 @@ import { useState } from "react"
 import { cn } from "@/lib/utils"
 
 type ProductImageProps = {
-  src: string
+  /** With none, the fallback mark is shown. */
+  src?: string
   /** Empty when the name is already shown beside the image. */
   alt: string
   sizes: string
   loading?: "lazy" | "eager"
+  fetchPriority?: "high" | "low" | "auto"
+  /** `false` drops the dark stage and its glow, for a caller that lights the
+      cutout itself. */
+  stage?: boolean
   /** Sets the box: an aspect ratio, or a width that stretches with its row. */
   className?: string
 }
@@ -21,6 +26,8 @@ function ProductImage({
   alt,
   sizes,
   loading,
+  fetchPriority,
+  stage = true,
   className,
 }: ProductImageProps) {
   const [failed, setFailed] = useState(false)
@@ -29,15 +36,19 @@ function ProductImage({
     <div
       data-slot="product-image"
       className={cn(
-        "relative isolate overflow-hidden bg-linear-to-b from-muted to-background",
+        "relative",
+        stage &&
+          "isolate overflow-hidden bg-linear-to-b from-muted to-background",
         className
       )}
     >
-      <span
-        aria-hidden="true"
-        className="absolute inset-0 bg-[radial-gradient(circle_closest-side_at_50%_56%,color-mix(in_oklab,var(--gold)_42%,transparent)_0%,color-mix(in_oklab,var(--gold)_16%,transparent)_60%,transparent_100%)]"
-      />
-      {failed ? (
+      {stage ? (
+        <span
+          aria-hidden="true"
+          className="absolute inset-0 bg-[radial-gradient(circle_closest-side_at_50%_56%,color-mix(in_oklab,var(--gold)_42%,transparent)_0%,color-mix(in_oklab,var(--gold)_16%,transparent)_60%,transparent_100%)]"
+        />
+      ) : null}
+      {failed || !src ? (
         <>
           <Image
             src="/logo-mark.svg"
@@ -59,6 +70,7 @@ function ProductImage({
           fill
           sizes={sizes}
           loading={loading}
+          fetchPriority={fetchPriority}
           onError={() => setFailed(true)}
           className="object-contain p-[8%] drop-shadow-xl drop-shadow-black/60"
         />

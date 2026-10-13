@@ -139,7 +139,7 @@ One function per stored line returns, for display: the kind, title, variant labe
 - **Derived values** (subtotal, item count, summaries) are not stored; they are computed from the lines with the plain functions.
 - **Persistence:** `persist` with the `localStorage` key `drippin-bites-cart`, schema `version: 1`, saving the lines only (not `hydrated`, not actions).
 - **Safe storage:** every read, write and remove is guarded. If `localStorage` is missing, throws on access (blocked site data), throws on write (quota, some private modes) or holds text that is not valid JSON, the store carries on in memory and nothing is thrown or logged to the customer.
-- **Loading:** the store does not read storage while the module loads. A small client component mounted once in the root layout triggers the load after hydration, runs every stored line through the validity check, and then sets `hydrated`. If storage is unavailable, `hydrated` still becomes true.
+- **Loading:** the store does not read storage while the module loads. A small client component mounted once in the root layout triggers the load after hydration, runs every stored line through the validity check, and then sets `hydrated`. If storage is unavailable, `hydrated` still becomes true. *(Changed on 2026-10-14: the store now loads itself when its module runs in the browser and `components/cart/cart-hydration.tsx` is removed. A mount-once effect did not re-run when a hot reload re-created the store, which left `hydrated` false and every Add button disabled. See CLAUDE.md section 12.)*
 - **Version change:** a stored cart with a different `version` is discarded, not migrated.
 
 ### Env vars, zod
@@ -156,7 +156,7 @@ Files to create:
 - `lib/cart/pricing.ts`: add-on group price, unit price, line total, subtotal, item count.
 - `lib/cart/summary.ts`: the line summary for display and for the WhatsApp message.
 - `store/cart.ts`: the Zustand store, the guarded storage and the `persist` setup. `store/` is a new top-level folder; it holds client state, which fits neither `lib/` (pure functions) nor `components/`.
-- `components/cart/cart-hydration.tsx`: client component that renders nothing and loads the saved cart once after hydration. Spec 08 adds the rest of `components/cart/`.
+- `components/cart/cart-hydration.tsx`: client component that renders nothing and loads the saved cart once after hydration. Spec 08 adds the rest of `components/cart/`. *(Removed on 2026-10-14; see the note under Loading.)*
 
 Files to modify:
 

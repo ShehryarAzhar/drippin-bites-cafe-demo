@@ -78,7 +78,7 @@ export const useCartStore = create<CartState>()(
       version: STORAGE_VERSION,
       storage: safeStorage,
       partialize: (state) => ({ lines: state.lines }),
-      // Read on the client after hydration (loadCart), never at module load.
+      // Read by loadCart below, so the read and the `hydrated` flag stay together.
       skipHydration: true,
       // A cart saved by another version is discarded, not migrated.
       migrate: () => ({ lines: [] }),
@@ -95,3 +95,10 @@ export function loadCart() {
   void useCartStore.persist.rehydrate()
   useCartStore.setState({ hydrated: true })
 }
+
+// The store loads itself as soon as it exists in the browser. This must not
+// move into a component effect: a hot reload of anything imported here
+// re-creates the store, an effect that already ran does not run again, and
+// every Add button then stays disabled until a full reload. The first render
+// still matches the server, because zustand hydrates from the initial state.
+if (typeof window !== "undefined") loadCart()
