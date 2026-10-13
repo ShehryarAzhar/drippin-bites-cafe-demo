@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Anton, Figtree } from "next/font/google";
 import "./globals.css";
+import { CartHydration } from "@/components/cart/cart-hydration";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { getFeaturedCategory, menu } from "@/lib/menu";
@@ -69,6 +70,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main>
         <SiteFooter />
+        <CartHydration />
       </body>
     </html>
   );
