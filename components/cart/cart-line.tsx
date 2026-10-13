@@ -6,14 +6,8 @@ import { Button } from "@/components/ui/button"
 import { MAX_LINE_QUANTITY } from "@/lib/cart/line"
 import { formatPrice } from "@/lib/format"
 import { cn } from "@/lib/utils"
+import { versionColors } from "@/lib/version-colors"
 import type { CartLine as CartLineData, LineDetail, LineSummary } from "@/types/cart"
-
-// The printed menu's colours for the two Cairo versions, by variant id.
-// Every other variant (a pizza size) gets the neutral tag.
-const versionTag: Record<string, string> = {
-  authentic: "bg-navy text-white",
-  lahori: "bg-brand-red text-white",
-}
 
 function DetailPrice({ price }: { price: LineDetail["price"] }) {
   if (price === undefined) return null
@@ -70,7 +64,8 @@ function CartLine({
               <span
                 className={cn(
                   "rounded-sm px-1.5 py-0.5 text-[0.6875rem] leading-tight font-semibold tracking-wide uppercase",
-                  versionTag[line.variantId] ??
+                  // Any other variant (a pizza size) gets the neutral tag.
+                  versionColors[line.variantId] ??
                     "bg-secondary text-secondary-foreground"
                 )}
               >

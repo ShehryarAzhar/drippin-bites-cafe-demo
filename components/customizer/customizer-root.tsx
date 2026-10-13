@@ -23,7 +23,7 @@ function CustomizerRoot() {
     close()
   }, [pathname, close])
 
-  // An id the menu no longer has, or an item still waiting for its picker,
+  // An id the menu no longer has, or an item the customiser cannot finish,
   // never opens the sheet.
   const found = target ? findItem(target.itemId) : undefined
   const resolved =

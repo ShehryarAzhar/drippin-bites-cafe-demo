@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react"
 import { BrandHeading } from "@/components/brand/brand-heading"
 import { CustomizerPanel } from "@/components/customizer/customizer-shell"
 import { SizePicker } from "@/components/customizer/size-picker"
+import { VersionToggle } from "@/components/customizer/version-toggle"
 import { ItemTags } from "@/components/menu/item-tags"
 import { SheetDescription, SheetTitle } from "@/components/ui/sheet"
 import { getQuantityInCart, MAX_LINE_QUANTITY } from "@/lib/cart/line"
@@ -20,6 +21,7 @@ import {
   getVariantLabel,
   getVariantType,
 } from "@/lib/menu"
+import { cn } from "@/lib/utils"
 import { useCartStore } from "@/store/cart"
 import { useCustomizerStore } from "@/store/customizer"
 import type { ItemSelection } from "@/types/cart"
@@ -40,9 +42,9 @@ function toSelection(item: Item, variant: Variant): ItemSelection {
 }
 
 /**
- * One item in the customiser: its size where it has sizes, quantity, live
- * total and Add to cart. Mounted afresh on every open, so it always starts at
- * 1 with no size chosen.
+ * One item in the customiser: its size or version where it has them, quantity,
+ * live total and Add to cart. Mounted afresh on every open, so it always
+ * starts at 1, with no size chosen or on the first version.
  */
 function ItemCustomizer({ item, category, onAdded }: ItemCustomizerProps) {
   const lines = useCartStore((state) => state.lines)
@@ -50,8 +52,15 @@ function ItemCustomizer({ item, category, onAdded }: ItemCustomizerProps) {
   const addLine = useCartStore((state) => state.addLine)
   const close = useCustomizerStore((state) => state.close)
 
+  const variantType = getVariantType(item, category)
+  const sized = variantType === "size"
+  const versioned = variantType === "version"
+
   const [quantity, setQuantity] = useState(1)
-  const [sizeId, setSizeId] = useState<string | null>(null)
+  // A size has to be chosen; anything else starts on its first variant.
+  const [variantId, setVariantId] = useState<string | null>(() =>
+    sized ? null : getDefaultVariant(item).id
+  )
   const [status, setStatus] = useState<"idle" | "added" | "refused">("idle")
   const closeTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
   const sizeRef = useRef<HTMLDivElement>(null)
@@ -59,13 +68,8 @@ function ItemCustomizer({ item, category, onAdded }: ItemCustomizerProps) {
   // A sheet opened on another item must not be closed by this one's timer.
   useEffect(() => () => clearTimeout(closeTimer.current), [])
 
-  const sized = getVariantType(item, category) === "size"
   // A sized item has no variant, and so no price, until a size is chosen.
-  const variant = sized
-    ? sizeId
-      ? getVariant(item, sizeId)
-      : undefined
-    : getDefaultVariant(item)
+  const variant = variantId ? getVariant(item, variantId) : undefined
   const name = getDisplayName(item, variant)
   const description = getDisplayDescription(item, variant)
   const selection = variant ? toSelection(item, variant) : undefined
@@ -77,13 +81,13 @@ function ItemCustomizer({ item, category, onAdded }: ItemCustomizerProps) {
   const added = status === "added"
   const full = !added && remaining < 1
 
-  const chooseSize = (id: string) => {
+  const chooseVariant = (id: string) => {
     const next = getVariant(item, id)
     if (!next) return
-    // Each size is its own cart line, with its own room left.
+    // Each size or version is its own cart line, with its own room left.
     const room =
       MAX_LINE_QUANTITY - getQuantityInCart(lines, toSelection(item, next))
-    setSizeId(id)
+    setVariantId(id)
     setQuantity((q) => Math.max(1, Math.min(q, room)))
     setStatus("idle")
   }
@@ -103,7 +107,7 @@ function ItemCustomizer({ item, category, onAdded }: ItemCustomizerProps) {
     }
     setStatus("added")
     const subtotal = getSubtotal(useCartStore.getState().lines)
-    const label = sized
+    const label = variantType
       ? `${name} (${getVariantLabel(item, category, variant)})`
       : name
     const message = `${quantity} × ${label} added to cart. Subtotal ${formatPrice(subtotal)}.`
@@ -146,25 +150,49 @@ function ItemCustomizer({ item, category, onAdded }: ItemCustomizerProps) {
       }
       onAdd={add}
     >
-      <ItemTags tags={getTags(item, variant)} />
-      <SheetTitle
-        render={
-          <BrandHeading
-            as="h2"
-            size="card"
-            align="start"
-            {...splitName(name)}
+      {versioned && variant ? (
+        // First in the body, so it stays put while what is under it swaps.
+        // Held still while "Added" shows, and below the close button from `md`.
+        <div inert={added} className="md:mt-9">
+          <VersionToggle
+            options={item.variants.map((v) => ({
+              id: v.id,
+              label: getVariantLabel(item, category, v),
+              price: formatPrice(v.price),
+            }))}
+            value={variant.id}
+            onChange={chooseVariant}
           />
-        }
-        // Clear of the close button, which sits over this column from `md`.
-        className="wrap-break-word md:pr-12"
-      />
-      {item.subtitle ? (
-        <p className="text-xs font-medium tracking-[0.18em] text-primary uppercase">
-          {item.subtitle}
-        </p>
+        </div>
       ) : null}
-      {description ? <SheetDescription>{description}</SheetDescription> : null}
+      {/* Keyed by version, so a change of version fades its content in. */}
+      <div
+        key={versioned ? variant?.id : undefined}
+        className={cn(
+          "flex flex-col gap-3",
+          versioned && "animate-in duration-200 fade-in"
+        )}
+      >
+        <ItemTags tags={getTags(item, variant)} />
+        <SheetTitle
+          render={
+            <BrandHeading
+              as="h2"
+              size="card"
+              align="start"
+              {...splitName(name)}
+            />
+          }
+          // Clear of the close button, which sits over this column from `md`.
+          className="wrap-break-word md:pr-12"
+        />
+        {item.subtitle ? (
+          <p className="text-xs font-medium tracking-[0.18em] text-primary uppercase">
+            {item.subtitle}
+          </p>
+        ) : null}
+        {description ? <SheetDescription>{description}</SheetDescription> : null}
+      </div>
       {sized ? (
         <>
           <span
@@ -182,16 +210,16 @@ function ItemCustomizer({ item, category, onAdded }: ItemCustomizerProps) {
                 price: formatPrice(v.price),
               }))}
               value={variant?.id ?? null}
-              onChange={chooseSize}
+              onChange={chooseVariant}
             />
           </div>
         </>
-      ) : unitPrice !== undefined ? (
+      ) : !versioned && unitPrice !== undefined ? (
         <p className="text-lg font-bold tabular-nums">
           {formatPrice(unitPrice)}
         </p>
       ) : null}
-      {/* Version and dips pickers go here, under a fading gold rule. */}
+      {/* Dips pickers go here, under a fading gold rule. */}
     </CustomizerPanel>
   )
 }
