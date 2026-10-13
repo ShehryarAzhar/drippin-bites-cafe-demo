@@ -4,6 +4,7 @@ import type {
   AddOnGroup,
   Category,
   Combo,
+  ComboSlot,
   Deal,
   DealPizzaLine,
   Item,
@@ -152,6 +153,43 @@ export function resolveItemRef(ref: ItemRef): ResolvedItem | undefined {
 
 export function getCombo(id: string): Combo | undefined {
   return menu.combos.find((c) => c.id === id)
+}
+
+/** One slot of a combo with its item refs resolved against the menu. */
+export type ComboStep =
+  | { kind: "options"; slot: ComboSlot; options: ResolvedItem[] }
+  | { kind: "fixed"; slot: ComboSlot; resolved: ResolvedItem }
+
+/**
+ * A combo's slots in file order. A ref the menu no longer has is skipped;
+ * undefined when that leaves nothing to build or a choice with no options.
+ */
+export function getComboSteps(combo: Combo): ComboStep[] | undefined {
+  const steps: ComboStep[] = []
+  for (const slot of combo.slots) {
+    if (slot.fixed) {
+      const resolved = resolveItemRef(slot.fixed)
+      if (resolved) steps.push({ kind: "fixed", slot, resolved })
+      continue
+    }
+    const options = slot.options
+      .map((ref) => resolveItemRef(ref))
+      .filter((option) => option !== undefined)
+    if (options.length === 0) return undefined
+    steps.push({ kind: "options", slot, options })
+  }
+  return steps.length > 0 ? steps : undefined
+}
+
+/** Combos built only from this category's items, so its section shows them. */
+export function getCategoryCombos(category: Category): Combo[] {
+  return menu.combos.filter((combo) =>
+    getComboSteps(combo)?.every((step) =>
+      (step.kind === "fixed" ? [step.resolved] : step.options).every(
+        (resolved) => resolved.category.id === category.id,
+      ),
+    ),
+  )
 }
 
 export function getDeal(id: string): Deal | undefined {

@@ -1,3 +1,4 @@
+import { priceAddOnGroup } from "@/lib/cart/pricing"
 import { formatPrice } from "@/lib/format"
 import type { AddOnGroup } from "@/types/menu"
 
@@ -27,4 +28,26 @@ export function getAddOnRule(group: AddOnGroup): string | undefined {
     return `${formatFreeAllowance(group.freeCount)}, then ${formatPrice(group.extraPrice)} each`
   }
   return group.options.every((o) => !o.price) ? "Included" : undefined
+}
+
+/** `accent` for something free, `muted` for a hint, `plain` for a cost. */
+export type AddOnStatus = { text: string; tone: "accent" | "muted" | "plain" }
+
+/** The end of a group's heading row: its hint, or what the chosen ones cost. */
+export function getAddOnStatus(
+  group: AddOnGroup,
+  optionIds: string[],
+): AddOnStatus {
+  if (optionIds.length === 0) {
+    return group.freeCount > 0
+      ? { text: formatFreeAllowance(group.freeCount), tone: "accent" }
+      : { text: "Optional", tone: "muted" }
+  }
+  const cost = priceAddOnGroup(group, optionIds).reduce(
+    (sum, addOn) => sum + addOn.price,
+    0,
+  )
+  return cost === 0
+    ? { text: "Free", tone: "accent" }
+    : { text: `+ ${formatPrice(cost)}`, tone: "plain" }
 }

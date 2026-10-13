@@ -3,21 +3,15 @@
 import { useEffect, useRef, useState } from "react"
 
 import { AddOnPicker } from "@/components/customizer/add-on-picker"
-import type { AddOnStatus } from "@/components/customizer/add-on-picker"
 import { BrandHeading } from "@/components/brand/brand-heading"
 import { CustomizerPanel } from "@/components/customizer/customizer-shell"
 import { SizePicker } from "@/components/customizer/size-picker"
 import { VersionToggle } from "@/components/customizer/version-toggle"
 import { ItemTags } from "@/components/menu/item-tags"
 import { SheetDescription, SheetTitle } from "@/components/ui/sheet"
-import { formatFreeAllowance, getAddOnRule } from "@/lib/cart/copy"
+import { getAddOnRule, getAddOnStatus } from "@/lib/cart/copy"
 import { getQuantityInCart, MAX_LINE_QUANTITY } from "@/lib/cart/line"
-import {
-  getSubtotal,
-  getUnitPrice,
-  priceAddOnGroup,
-  priceAddOns,
-} from "@/lib/cart/pricing"
+import { getSubtotal, getUnitPrice, priceAddOns } from "@/lib/cart/pricing"
 import { formatPrice, splitName } from "@/lib/format"
 import {
   getDefaultVariant,
@@ -61,22 +55,6 @@ function toSelection(
     return optionIds.length > 0 ? [{ groupId: group.id, optionIds }] : []
   })
   return { kind: "item", itemId: item.id, variantId: variant.id, addOns }
-}
-
-/** The end of a group's heading row: its hint, or what the chosen ones cost. */
-function getAddOnStatus(group: AddOnGroup, optionIds: string[]): AddOnStatus {
-  if (optionIds.length === 0) {
-    return group.freeCount > 0
-      ? { text: formatFreeAllowance(group.freeCount), tone: "accent" }
-      : { text: "Optional", tone: "muted" }
-  }
-  const cost = priceAddOnGroup(group, optionIds).reduce(
-    (sum, addOn) => sum + addOn.price,
-    0
-  )
-  return cost === 0
-    ? { text: "Free", tone: "accent" }
-    : { text: `+ ${formatPrice(cost)}`, tone: "plain" }
 }
 
 /**
