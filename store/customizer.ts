@@ -1,9 +1,10 @@
 import { create } from "zustand"
 
-/** What the customiser is showing. Deals join as a further kind. */
+/** What the customiser is showing. */
 export type CustomizerTarget =
   | { kind: "item"; itemId: string }
   | { kind: "combo"; comboId: string }
+  | { kind: "deal"; dealId: string }
 
 type CustomizerState = {
   target: CustomizerTarget | null
@@ -12,6 +13,7 @@ type CustomizerState = {
   openId: number
   openItem: (itemId: string) => void
   openCombo: (comboId: string) => void
+  openDeal: (dealId: string) => void
   /** Keeps the target, so the sheet still has its content while it leaves. */
   close: () => void
 }
@@ -30,6 +32,12 @@ export const useCustomizerStore = create<CustomizerState>()((set) => ({
   openCombo: (comboId) =>
     set((state) => ({
       target: { kind: "combo", comboId },
+      open: true,
+      openId: state.openId + 1,
+    })),
+  openDeal: (dealId) =>
+    set((state) => ({
+      target: { kind: "deal", dealId },
       open: true,
       openId: state.openId + 1,
     })),

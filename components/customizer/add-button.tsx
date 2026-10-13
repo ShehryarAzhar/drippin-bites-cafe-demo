@@ -14,9 +14,10 @@ type AddButtonProps = {
   /** What the card sits on; it decides which focus ring can be seen. */
   surface?: "card" | "dark"
 } & (
-  | { itemId: string; comboId?: never }
+  | { itemId: string; comboId?: never; dealId?: never }
   /** A combo is built step by step, so its button says so. */
-  | { comboId: string; itemId?: never }
+  | { comboId: string; itemId?: never; dealId?: never }
+  | { dealId: string; itemId?: never; comboId?: never }
 )
 
 /**
@@ -27,17 +28,20 @@ type AddButtonProps = {
 function AddButton({
   itemId,
   comboId,
+  dealId,
   name,
   layout = "stacked",
   surface = "card",
 }: AddButtonProps) {
   const openItem = useCustomizerStore((state) => state.openItem)
   const openCombo = useCustomizerStore((state) => state.openCombo)
+  const openDeal = useCustomizerStore((state) => state.openDeal)
   const isRow = layout === "row"
   const isCombo = comboId !== undefined
 
   const open = () => {
     if (comboId !== undefined) openCombo(comboId)
+    else if (dealId !== undefined) openDeal(dealId)
     else if (itemId !== undefined) openItem(itemId)
   }
 

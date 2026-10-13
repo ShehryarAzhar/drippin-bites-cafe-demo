@@ -4,10 +4,17 @@ import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 
 import { ComboCustomizer } from "@/components/customizer/combo-customizer"
+import { DealCustomizer } from "@/components/customizer/deal-customizer"
 import { CustomizerSheet } from "@/components/customizer/customizer-shell"
 import { ItemCustomizer } from "@/components/customizer/item-customizer"
 import { canCustomize } from "@/lib/customizer"
-import { findItem, getCombo, getComboSteps } from "@/lib/menu"
+import {
+  findItem,
+  getCombo,
+  getComboSteps,
+  getDeal,
+  getDealSteps,
+} from "@/lib/menu"
 import { useCustomizerStore } from "@/store/customizer"
 
 /** The one customiser, opened from any card's Add or Build button. */
@@ -32,11 +39,17 @@ function CustomizerRoot() {
   // Nor does a combo the menu no longer has, or one with a step left empty.
   const combo = target?.kind === "combo" ? getCombo(target.comboId) : undefined
   const steps = combo ? getComboSteps(combo) : undefined
+  // Nor a deal the menu no longer has, or one with a choice nothing can fill.
+  const deal = target?.kind === "deal" ? getDeal(target.dealId) : undefined
+  const plan = deal ? getDealSteps(deal) : undefined
 
   return (
     <>
       <CustomizerSheet
-        open={open && (resolved !== undefined || steps !== undefined)}
+        open={
+          open &&
+          (resolved !== undefined || steps !== undefined || plan !== undefined)
+        }
         onClose={close}
       >
         {resolved ? (
@@ -51,6 +64,13 @@ function CustomizerRoot() {
             key={openId}
             combo={combo}
             steps={steps}
+            onAdded={setAnnouncement}
+          />
+        ) : deal && plan ? (
+          <DealCustomizer
+            key={openId}
+            deal={deal}
+            plan={plan}
             onAdded={setAnnouncement}
           />
         ) : null}
