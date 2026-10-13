@@ -3,9 +3,11 @@ import { GoldRule } from "@/components/brand/gold-rule"
 import { PillLabel } from "@/components/brand/pill-label"
 import { ItemCard } from "@/components/menu/item-card"
 import { splitName } from "@/lib/format"
-import { groupItems } from "@/lib/menu"
+import { getCategoryCombos, groupItems } from "@/lib/menu"
 import { cn } from "@/lib/utils"
 import type { Category, Item, ItemGroup } from "@/types/menu"
+
+import { ComboCard } from "./combo-card"
 
 const groupLabels: Record<ItemGroup, string> = {
   sides: "Sides",
@@ -50,6 +52,7 @@ function CategorySection({ category, featured = false }: CategorySectionProps) {
   const headingId = `${category.id}-heading`
   const { ungrouped, ...groups } = groupItems(category)
   const subGroups = groupOrder.filter((group) => groups[group].length > 0)
+  const combos = getCategoryCombos(category)
 
   return (
     <section
@@ -115,6 +118,17 @@ function CategorySection({ category, featured = false }: CategorySectionProps) {
               className="mt-8 md:mt-10 md:grid-cols-2 xl:grid-cols-3"
             />
           )
+        ) : null}
+
+        {/* The closing row of the cards above: the meal made from them. */}
+        {combos.length > 0 ? (
+          <ul className="mt-5 grid gap-5 lg:mt-6 lg:gap-6">
+            {combos.map((combo) => (
+              <li key={combo.id}>
+                <ComboCard combo={combo} />
+              </li>
+            ))}
+          </ul>
         ) : null}
 
         {subGroups.length > 0 ? (

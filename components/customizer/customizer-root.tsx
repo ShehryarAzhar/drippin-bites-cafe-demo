@@ -3,13 +3,14 @@
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 
+import { ComboCustomizer } from "@/components/customizer/combo-customizer"
 import { CustomizerSheet } from "@/components/customizer/customizer-shell"
 import { ItemCustomizer } from "@/components/customizer/item-customizer"
 import { canCustomize } from "@/lib/customizer"
-import { findItem } from "@/lib/menu"
+import { findItem, getCombo, getComboSteps } from "@/lib/menu"
 import { useCustomizerStore } from "@/store/customizer"
 
-/** The one customiser, opened from any card's Add button. */
+/** The one customiser, opened from any card's Add or Build button. */
 function CustomizerRoot() {
   const target = useCustomizerStore((state) => state.target)
   const open = useCustomizerStore((state) => state.open)
@@ -25,18 +26,31 @@ function CustomizerRoot() {
 
   // An id the menu no longer has, or an item the customiser cannot finish,
   // never opens the sheet.
-  const found = target ? findItem(target.itemId) : undefined
+  const found = target?.kind === "item" ? findItem(target.itemId) : undefined
   const resolved =
     found && canCustomize(found.item, found.category) ? found : undefined
+  // Nor does a combo the menu no longer has, or one with a step left empty.
+  const combo = target?.kind === "combo" ? getCombo(target.comboId) : undefined
+  const steps = combo ? getComboSteps(combo) : undefined
 
   return (
     <>
-      <CustomizerSheet open={open && resolved !== undefined} onClose={close}>
+      <CustomizerSheet
+        open={open && (resolved !== undefined || steps !== undefined)}
+        onClose={close}
+      >
         {resolved ? (
           <ItemCustomizer
             key={openId}
             item={resolved.item}
             category={resolved.category}
+            onAdded={setAnnouncement}
+          />
+        ) : combo && steps ? (
+          <ComboCustomizer
+            key={openId}
+            combo={combo}
+            steps={steps}
             onAdded={setAnnouncement}
           />
         ) : null}

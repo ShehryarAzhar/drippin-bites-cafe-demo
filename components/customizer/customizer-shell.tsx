@@ -157,6 +157,9 @@ function CustomizerPanel({
             className={cn(
               "min-w-0 flex-1 px-4 text-[0.9375rem] aria-disabled:pointer-events-none aria-disabled:opacity-50 sm:px-6 sm:text-base",
               added && "pointer-events-none",
+              // A step's name can be longer than the button is wide.
+              waiting &&
+                "h-auto min-h-14 py-2 leading-tight text-balance whitespace-normal",
               !added && !waiting && "justify-between"
             )}
           >
