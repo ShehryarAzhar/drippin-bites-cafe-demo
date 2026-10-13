@@ -59,6 +59,11 @@ type CustomizerPanelProps = {
   added?: boolean
   /** One short line above the controls. */
   notice?: { text: string; tone: "muted" | "error" }
+  /**
+   * A choice is still needed: the button shows this label and runs this
+   * action instead of adding.
+   */
+  pending?: { label: string; onAction: () => void }
   onAdd: () => void
 }
 
@@ -78,13 +83,16 @@ function CustomizerPanel({
   disabled = false,
   added = false,
   notice,
+  pending,
   onAdd,
 }: CustomizerPanelProps) {
+  const waiting = pending !== undefined && !added
+
   return (
     <>
       {/* Phone: stage and body scroll together. From `md` the wrapper drops
           out and its children sit in the panel's grid. */}
-      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain md:contents">
+      <div className="min-h-0 flex-1 overflow-y-auto scroll-smooth overscroll-contain md:contents">
         <ProductImage
           src={image}
           alt=""
@@ -92,7 +100,7 @@ function CustomizerPanel({
           loading="eager"
           className="aspect-16/10 w-full md:col-start-1 md:row-span-2 md:row-start-1 md:aspect-auto md:h-full md:min-h-96"
         />
-        <div className="flex flex-col gap-3 p-5 sm:p-6 md:col-start-2 md:row-start-1 md:min-h-0 md:overflow-y-auto md:pt-7">
+        <div className="flex flex-col gap-3 p-5 sm:p-6 md:col-start-2 md:row-start-1 md:min-h-0 md:overflow-y-auto md:scroll-smooth md:pt-7">
           {children}
         </div>
       </div>
@@ -134,12 +142,19 @@ function CustomizerPanel({
             // Stays focusable, so focus has somewhere to return from.
             focusableWhenDisabled
             aria-label={
-              added ? "Added" : total ? `Add to cart, ${total}` : "Add to cart"
+              added
+                ? "Added"
+                : waiting
+                  ? pending.label
+                  : total
+                    ? `Add to cart, ${total}`
+                    : "Add to cart"
             }
-            onClick={onAdd}
+            onClick={waiting ? pending.onAction : onAdd}
             className={cn(
               "min-w-0 flex-1 px-4 text-[0.9375rem] aria-disabled:pointer-events-none aria-disabled:opacity-50 sm:px-6 sm:text-base",
-              added ? "pointer-events-none" : "justify-between"
+              added && "pointer-events-none",
+              !added && !waiting && "justify-between"
             )}
           >
             {added ? (
@@ -147,6 +162,8 @@ function CustomizerPanel({
                 <Check aria-hidden="true" />
                 Added
               </span>
+            ) : waiting ? (
+              pending.label
             ) : (
               <>
                 <span>Add to cart</span>
