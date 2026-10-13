@@ -134,6 +134,20 @@
   }
 }
 
+/* The cart badge pops once whenever its count changes. */
+@utility badge-pop {
+  animation: badge-pop 250ms ease-out;
+}
+
+@keyframes badge-pop {
+  from {
+    scale: 0.6;
+  }
+  60% {
+    scale: 1.18;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
