@@ -94,11 +94,14 @@ function CustomizerPanel({
           out and its children sit in the panel's grid. */}
       <div className="min-h-0 flex-1 overflow-y-auto scroll-smooth overscroll-contain md:contents">
         <ProductImage
+          // A fresh stage per photo: the new cutout fades in, and a photo
+          // that failed cannot hide the next one.
+          key={image}
           src={image}
           alt=""
           sizes="(min-width: 48rem) 380px, 100vw"
           loading="eager"
-          className="aspect-16/10 w-full md:col-start-1 md:row-span-2 md:row-start-1 md:aspect-auto md:h-full md:min-h-96"
+          className="aspect-16/10 w-full [&_img]:animate-in [&_img]:duration-200 [&_img]:fade-in md:col-start-1 md:row-span-2 md:row-start-1 md:aspect-auto md:h-full md:min-h-96"
         />
         <div className="flex flex-col gap-3 p-5 sm:p-6 md:col-start-2 md:row-start-1 md:min-h-0 md:overflow-y-auto md:scroll-smooth md:pt-7">
           {children}
