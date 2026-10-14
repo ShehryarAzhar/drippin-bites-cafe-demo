@@ -1,17 +1,23 @@
 "use client"
 
 import Link from "next/link"
-import { useMemo } from "react"
+import { useMemo, useRef, useState } from "react"
 
 import { CartEmpty } from "@/components/cart/cart-empty"
 import { buttonVariants } from "@/components/ui/button"
 import { getItemCount, getSubtotal } from "@/lib/cart/pricing"
 import { getLineSummary } from "@/lib/cart/summary"
+import { buildOrderMessage } from "@/lib/order-message"
 import { cn } from "@/lib/utils"
+import type { CheckoutDetails } from "@/lib/validations/checkout"
+import { buildWhatsAppUrl, getWhatsAppNumber } from "@/lib/whatsapp"
 import { useCartStore } from "@/store/cart"
+import type { CartLine } from "@/types/cart"
 
 import { CheckoutForm } from "./checkout-form"
+import { OrderSent } from "./order-sent"
 import { OrderSummary, summaryPanel } from "./order-summary"
+import { SendConfirmation } from "./send-confirmation"
 
 // Below lg one centred column; from lg the form left, the summary right.
 const grid =
@@ -57,10 +63,22 @@ function CheckoutLoading() {
   )
 }
 
-/** Picks what checkout shows: loading, the empty cart, or the order and form. */
+const whatsappNumber = getWhatsAppNumber()
+
+/** The order that was opened in WhatsApp, and the cart it was built from. */
+type SentOrder = { url: string; lines: CartLine[] }
+
+/**
+ * Picks what checkout shows: loading, the empty cart, the order and form, the
+ * "Did you send it?" step after WhatsApp opens, or the order sent.
+ */
 function CheckoutView() {
   const lines = useCartStore((state) => state.lines)
   const hydrated = useCartStore((state) => state.hydrated)
+  const clearCart = useCartStore((state) => state.clear)
+  const [step, setStep] = useState<"form" | "confirm" | "sent">("form")
+  const [sent, setSent] = useState<SentOrder | null>(null)
+  const submitRef = useRef<HTMLButtonElement>(null)
 
   // Summaries are derived here, never inside a store selector.
   const rows = useMemo(
@@ -72,7 +90,41 @@ function CheckoutView() {
     [lines]
   )
 
+  // Any change to the cart makes a new `lines` array, so a message that no
+  // longer matches it drops checkout back to the form (or the empty state).
+  const confirming = step === "confirm" && sent !== null && sent.lines === lines
+
+  // Plain handlers, not memoised: the form calls onSend at submit time only.
+  const sendOrder = (details: CheckoutDetails) => {
+    if (!whatsappNumber) return
+    const text = buildOrderMessage({
+      summaries: rows.map((row) => row.summary),
+      subtotal: getSubtotal(lines),
+      details,
+    })
+    const url = buildWhatsAppUrl(whatsappNumber, text)
+    // A new tab keeps checkout alive for the step below; if the browser
+    // blocks it, that step's link opens the same chat.
+    window.open(url, "_blank", "noopener,noreferrer")
+    setSent({ url, lines })
+    setStep("confirm")
+  }
+
+  const confirmSent = () => {
+    clearCart()
+    setStep("sent")
+  }
+
+  const editDetails = () => {
+    setStep("form")
+    // The form is shown again on the next render; focus its button then.
+    requestAnimationFrame(() => submitRef.current?.focus())
+  }
+
   if (!hydrated) return <CheckoutLoading />
+
+  // Before the empty check: the cart is empty here because it was sent.
+  if (step === "sent") return <OrderSent />
 
   if (rows.length === 0) {
     return (
@@ -96,7 +148,21 @@ function CheckoutView() {
         subtotal={getSubtotal(lines)}
         className={summaryColumn}
       />
-      <CheckoutForm className={formColumn} />
+      {/* Hidden, not unmounted, while confirming: "Not yet" keeps every value. */}
+      <div hidden={confirming} className={formColumn}>
+        <CheckoutForm
+          onSend={whatsappNumber ? sendOrder : undefined}
+          submitRef={submitRef}
+        />
+      </div>
+      {confirming && sent ? (
+        <SendConfirmation
+          url={sent.url}
+          onConfirm={confirmSent}
+          onEdit={editDetails}
+          className={cn(formColumn, "lg:self-start")}
+        />
+      ) : null}
     </div>
   )
 }

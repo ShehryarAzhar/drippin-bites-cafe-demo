@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Send, ShoppingBag, Truck, UtensilsCrossed } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
+import type { Ref } from "react"
 import {
   Controller,
   useForm,
@@ -35,6 +36,7 @@ import type { OrderType } from "@/types/menu"
 
 import { sectionLabel } from "./order-summary"
 import { OrderTypePicker } from "./order-type-picker"
+import { WhatsAppUnavailable } from "./whatsapp-unavailable"
 
 const ORDER_TYPE_ICONS: Record<OrderType, LucideIcon> = {
   delivery: Truck,
@@ -60,13 +62,21 @@ function describedBy(...ids: (string | false | undefined)[]) {
   return ids.filter(Boolean).join(" ") || undefined
 }
 
+type CheckoutFormProps = {
+  /** Sends the parsed details on; absent when no WhatsApp number is set. */
+  onSend?: (details: CheckoutDetails) => void
+  /** Lets checkout put focus back on the submit button. */
+  submitRef?: Ref<HTMLButtonElement>
+  className?: string
+}
+
 /** The customer's details: order type, name, phone, address and notes. */
-function CheckoutForm({ className }: { className?: string }) {
+function CheckoutForm({ onSend, submitRef, className }: CheckoutFormProps) {
   const {
     control,
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<CheckoutFormValues, unknown, CheckoutDetails>({
     resolver: zodResolver(checkoutSchema),
     defaultValues,
@@ -77,8 +87,9 @@ function CheckoutForm({ className }: { className?: string }) {
   const orderType = useWatch({ control, name: "orderType" })
   const notes = useWatch({ control, name: "notes" }) ?? ""
 
-  // Spec 18 builds the WhatsApp message from these details and opens it.
-  const sendOrder: SubmitHandler<CheckoutDetails> = () => {}
+  const sendOrder: SubmitHandler<CheckoutDetails> = (details) => {
+    onSend?.(details)
+  }
 
   return (
     <form
@@ -219,15 +230,25 @@ function CheckoutForm({ className }: { className?: string }) {
         </Field>
       </section>
 
-      <div className="flex flex-col gap-3">
-        <Button type="submit" size="lg" className="w-full">
-          <Send aria-hidden="true" />
-          Send Order on WhatsApp
-        </Button>
-        <p className="text-center text-[0.8125rem] text-muted-foreground">
-          You&apos;ll review the message in WhatsApp before it&apos;s sent.
-        </p>
-      </div>
+      {onSend ? (
+        <div className="flex flex-col gap-3">
+          <Button
+            ref={submitRef}
+            type="submit"
+            size="lg"
+            disabled={isSubmitting}
+            className="w-full"
+          >
+            <Send aria-hidden="true" />
+            Send Order on WhatsApp
+          </Button>
+          <p className="text-center text-[0.8125rem] text-muted-foreground">
+            You&apos;ll review the message in WhatsApp before it&apos;s sent.
+          </p>
+        </div>
+      ) : (
+        <WhatsAppUnavailable />
+      )}
     </form>
   )
 }
