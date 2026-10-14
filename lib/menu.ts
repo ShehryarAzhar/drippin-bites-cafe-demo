@@ -39,6 +39,14 @@ export function getFeaturedCategory(): Category | undefined {
   return menu.categories.find((c) => c.featured)
 }
 
+/** Categories with items other than the featured one, in file order. */
+export function getShortcutCategories(): Category[] {
+  const featuredId = getFeaturedCategory()?.id
+  return menu.categories.filter(
+    (c) => c.items.length > 0 && c.id !== featuredId,
+  )
+}
+
 /** Item ids are unique across the menu, so no category id is needed. */
 export function findItem(itemId: string): ItemWithCategory | undefined {
   return itemsById.get(itemId)
@@ -123,6 +131,11 @@ export function getLowestPrice(item: Item) {
     price: Math.min(...prices),
     hasMultiplePrices: new Set(prices).size > 1,
   }
+}
+
+/** The cheapest variant of any item in the category; every size counts. */
+export function getCategoryLowestPrice(category: Category): number {
+  return Math.min(...category.items.map((item) => getLowestPrice(item).price))
 }
 
 export function getAddOnGroup(id: string): AddOnGroup | undefined {
