@@ -1,5 +1,5 @@
 import { cva, type VariantProps } from "class-variance-authority"
-import type { ReactNode } from "react"
+import type { ReactNode, Ref } from "react"
 
 import { cn } from "@/lib/utils"
 
@@ -30,6 +30,9 @@ type BrandHeadingProps = VariantProps<typeof brandHeadingVariants> & {
   accent?: ReactNode
   /** Lets a section point at its heading with `aria-labelledby`. */
   id?: string
+  /** `-1` with `ref` lets a view move focus to the heading when it appears. */
+  tabIndex?: number
+  ref?: Ref<HTMLHeadingElement>
   className?: string
 }
 
@@ -40,11 +43,15 @@ function BrandHeading({
   lead,
   accent,
   id,
+  tabIndex,
+  ref,
   className,
 }: BrandHeadingProps) {
   return (
     <Tag
       id={id}
+      ref={ref}
+      tabIndex={tabIndex}
       data-slot="brand-heading"
       className={cn(brandHeadingVariants({ size, align }), className)}
     >
