@@ -1,25 +1,12 @@
 import { Trash2 } from "lucide-react"
 
+import { LineDetails, LineVariantTag } from "@/components/cart/line-details"
 import { QuantityStepper } from "@/components/cart/quantity-stepper"
 import { ProductImage } from "@/components/menu/product-image"
 import { Button } from "@/components/ui/button"
 import { MAX_LINE_QUANTITY } from "@/lib/cart/line"
 import { formatPrice } from "@/lib/format"
-import { cn } from "@/lib/utils"
-import { versionColors } from "@/lib/version-colors"
-import type { CartLine as CartLineData, LineDetail, LineSummary } from "@/types/cart"
-
-function DetailPrice({ price }: { price: LineDetail["price"] }) {
-  if (price === undefined) return null
-  if (price === 0) {
-    return <span className="shrink-0 font-medium text-primary">Free</span>
-  }
-  return (
-    <span className="shrink-0 whitespace-nowrap tabular-nums">
-      + {formatPrice(price)}
-    </span>
-  )
-}
+import type { CartLine as CartLineData, LineSummary } from "@/types/cart"
 
 type CartLineProps = {
   line: CartLineData
@@ -38,10 +25,6 @@ function CartLine({
   onRemove,
 }: CartLineProps) {
   const { title, details, quantity } = summary
-  const variantLabel =
-    line.kind === "item" && summary.hasMultipleVariants
-      ? summary.variantLabel
-      : undefined
 
   return (
     <li
@@ -60,18 +43,7 @@ function CartLine({
             <h3 className="leading-snug font-semibold wrap-break-word">
               {title}
             </h3>
-            {variantLabel && line.kind === "item" ? (
-              <span
-                className={cn(
-                  "rounded-sm px-1.5 py-0.5 text-[0.6875rem] leading-tight font-semibold tracking-wide uppercase",
-                  // Any other variant (a pizza size) gets the neutral tag.
-                  versionColors[line.variantId] ??
-                    "bg-secondary text-secondary-foreground"
-                )}
-              >
-                {variantLabel}
-              </span>
-            ) : null}
+            <LineVariantTag line={line} summary={summary} />
           </div>
           <div className="shrink-0 text-end">
             <p className="font-bold whitespace-nowrap tabular-nums">
@@ -85,28 +57,7 @@ function CartLine({
           </div>
         </div>
 
-        {details.length > 0 ? (
-          <ul className="flex flex-col gap-0.5 text-[0.8125rem] text-muted-foreground">
-            {details.map((detail, index) => (
-              <li key={index}>
-                <div className="flex justify-between gap-3">
-                  <span className="min-w-0">
-                    {detail.quantity !== undefined
-                      ? `${detail.quantity} × `
-                      : null}
-                    {detail.label}
-                  </span>
-                  <DetailPrice price={detail.price} />
-                </div>
-                {detail.choices?.length ? (
-                  <p className="pl-3 text-foreground">
-                    {detail.choices.join(", ")}
-                  </p>
-                ) : null}
-              </li>
-            ))}
-          </ul>
-        ) : null}
+        <LineDetails details={details} />
 
         <div className="flex items-center justify-between">
           <QuantityStepper

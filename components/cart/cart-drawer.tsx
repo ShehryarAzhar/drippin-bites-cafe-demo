@@ -1,13 +1,12 @@
 "use client"
 
 import { ArrowRight, Truck, X } from "lucide-react"
-import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 import { BrandHeading } from "@/components/brand/brand-heading"
-import { GoldRule } from "@/components/brand/gold-rule"
+import { CartEmpty } from "@/components/cart/cart-empty"
 import { CartLine } from "@/components/cart/cart-line"
 import { Button, buttonVariants } from "@/components/ui/button"
 import {
@@ -165,45 +164,25 @@ function CartDrawer() {
               ))}
             </ul>
           ) : (
-            <div className="flex min-h-full flex-col items-center justify-center gap-5 py-10 text-center">
-              <div className="relative grid size-36 place-items-center">
-                <span
-                  aria-hidden="true"
-                  className="absolute inset-0 rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--gold)_22%,transparent),transparent)]"
-                />
-                <Image
-                  src="/logo-mark.svg"
-                  alt=""
-                  width={72}
-                  height={72}
-                  className="relative size-18 opacity-45"
-                />
-              </div>
-              <BrandHeading
-                as="h3"
-                size="card"
-                lead="Nothing here"
-                accent="yet"
-              />
-              <p className="max-w-[26ch] text-sm text-muted-foreground">
-                Add something from the menu and it shows up here.
-              </p>
-              <GoldRule className="max-w-40 sm:max-w-40" />
-              {pathname === "/menu" ? (
-                <Button data-cart-empty-action="" onClick={close}>
-                  Browse the Menu
-                </Button>
-              ) : (
-                <Link
-                  href="/menu"
-                  data-cart-empty-action=""
-                  onClick={close}
-                  className={buttonVariants()}
-                >
-                  Browse the Menu
-                </Link>
-              )}
-            </div>
+            <CartEmpty
+              className="min-h-full py-10"
+              action={
+                pathname === "/menu" ? (
+                  <Button data-cart-empty-action="" onClick={close}>
+                    Browse the Menu
+                  </Button>
+                ) : (
+                  <Link
+                    href="/menu"
+                    data-cart-empty-action=""
+                    onClick={close}
+                    className={buttonVariants()}
+                  >
+                    Browse the Menu
+                  </Link>
+                )
+              }
+            />
           )}
         </div>
 
@@ -222,17 +201,22 @@ function CartDrawer() {
               <Truck aria-hidden="true" className="size-4 shrink-0" />
               {DELIVERY_NOTE}
             </p>
-            <Link
-              href="/checkout"
-              // The route arrives with spec 17; prefetching it until then
-              // logs a 404 in the console.
-              prefetch={false}
-              onClick={close}
-              className={cn(buttonVariants({ size: "lg" }), "mt-4 w-full")}
-            >
-              Checkout
-              <ArrowRight aria-hidden="true" />
-            </Link>
+            {pathname === "/checkout" ? (
+              // Already on checkout: a link here would only reload the page.
+              <Button size="lg" onClick={close} className="mt-4 w-full">
+                Checkout
+                <ArrowRight aria-hidden="true" />
+              </Button>
+            ) : (
+              <Link
+                href="/checkout"
+                onClick={close}
+                className={cn(buttonVariants({ size: "lg" }), "mt-4 w-full")}
+              >
+                Checkout
+                <ArrowRight aria-hidden="true" />
+              </Link>
+            )}
           </div>
         ) : null}
 
