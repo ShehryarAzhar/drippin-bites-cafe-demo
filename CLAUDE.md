@@ -242,8 +242,7 @@ Each feature gets one numbered spec in `.claude/specs/`. Build in this order.
 | 16 | `16-home-sections` | Rest of `/`: category shortcuts, deals preview, TBD-safe location/contact section. | 14, 15 | Implemented |
 | 17 | `17-checkout-form` | `/checkout` with order summary and the form (order type, name, phone, address, notes) per section 13; empty-cart state. | 07, 08 | Implemented |
 | 18 | `18-whatsapp-order` | Plain-text message builder, `wa.me` link, missing-env-var message, clear the cart only after the customer confirms sending. | 17 | Implemented |
-| 19 | `19-responsive-accessibility-polish` | Final pass on all pages: mobile widths, 44px tap targets, focus states, icon-button labels, contrast, card alignment. | 01–18 | Stub |
-| 20 | `20-share-preview` | Generated Open Graph image (`opengraph-image.tsx` with logo + brand colours), Apple touch icon and `metadataBase`, once the demo URL is known. | 04 | Stub |
+| 19 | `19-share-preview` | Generated Open Graph image (`opengraph-image.tsx` with logo + brand colours), Apple touch icon and `metadataBase`, once the demo URL is known. | 04 | Stub |
 
 - Statuses are `Stub` (not built yet) or `Implemented` (built and verified against its acceptance criteria).
 - Create a spec with `/create-spec <number> <name>` using the number and slug from this table.

@@ -30,7 +30,7 @@ Finish the home page below "The Line-up" with three sections: category shortcuts
 - Changes to `DealCard`'s look or behaviour beyond the move to `components/menu/`; changes to the customiser, the cart or `/menu`.
 - Reviews, ratings, "bestseller" or "popular" labels, social-media embeds, newsletter signup.
 - The footer. It keeps its compact contact block; Find Us is a separate, larger section on `/` only (spec 04 drew this line).
-- Open Graph image and `metadataBase` (spec 20). A page-level `metadata` export.
+- Open Graph image and `metadataBase` (spec 19). A page-level `metadata` export.
 - Future phases from CLAUDE.md section 3: backend, auth, payments, WhatsApp Cloud API, admin dashboard, videos.
 - Editing `data/menu.json` or `types/menu.ts`. Installing packages. Tests of any kind.
 

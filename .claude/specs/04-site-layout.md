@@ -30,7 +30,7 @@ Give every page the shared shell: a sticky header with the Drippin Bites logo an
 - Corner decorations (dot grids, wavy lines, palm leaf). They are built in spec 15.
 - Social links. `menu.json` has no Instagram handle and none is invented.
 - Reading `NEXT_PUBLIC_WHATSAPP_NUMBER` (spec 18). The footer shows `restaurant.whatsapp` only as a contact value, and only when it is not TBD.
-- An Open Graph image, an Apple touch icon and `metadataBase` (spec 20, once the demo URL is known).
+- An Open Graph image, an Apple touch icon and `metadataBase` (spec 19, once the demo URL is known).
 - `robots`, `sitemap` and `manifest` files.
 - Installing packages or adding shadcn components. Everything needed (`Button`, the brand primitives, `lucide-react`) exists.
 - Future phases from CLAUDE.md section 3: backend, auth, payments, WhatsApp Cloud API, admin dashboard, videos. No "Login" or "Track order" links.
@@ -124,7 +124,7 @@ Reference: the posters in `docs/brand/` for the logo placement, the gold hairlin
   - `title.default`: `restaurant.name` + " | " + `restaurant.tagline`.
   - `title.template`: `"%s | " + restaurant.name`, so later pages export just "Menu" or "Checkout".
   - `description`: one sentence composed from the featured category name, `restaurant.name` and `restaurant.area`, along the lines of "Order Cairo Crunch Egyptian street food, pizzas, burgers and more from Drippin Bites Cafe, Johar Town, Lahore." The joining words are copy; the name, area and category name come from the data.
-  - `openGraph`: `title`, `description`, `siteName` (`restaurant.name`), `type: "website"`, `locale: "en_PK"`. No image and no `metadataBase`; both arrive in spec 20.
+  - `openGraph`: `title`, `description`, `siteName` (`restaurant.name`), `type: "website"`, `locale: "en_PK"`. No image and no `metadataBase`; both arrive in spec 19.
   - `icons`: nothing is set; the `app/icon.svg` file convention already provides the favicon.
 - **Viewport** (`app/layout.tsx`): a `viewport` export with `themeColor` equal to the `--background` value (`#14100C`) and `colorScheme: "dark"`. The hex is repeated here because the export cannot read a CSS variable; a comment points at `globals.css`.
 - **Cart state:** none.
@@ -226,4 +226,4 @@ No automated tests (per CLAUDE.md).
 
 ## Open questions
 
-None. The four questions from the first draft were answered on 2026-10-13 and are folded into the sections above: `app/not-found.tsx` stays in this spec; the Open Graph image, Apple touch icon and `metadataBase` move to a new spec 20 (`20-share-preview`); the footer shows only `restaurant.area` when every contact value is missing, with no "to be confirmed" line; and the header keeps the outlined "Menu" pill.
+None. The four questions from the first draft were answered on 2026-10-13 and are folded into the sections above: `app/not-found.tsx` stays in this spec; the Open Graph image, Apple touch icon and `metadataBase` move to a new spec 19 (`19-share-preview`); the footer shows only `restaurant.area` when every contact value is missing, with no "to be confirmed" line; and the header keeps the outlined "Menu" pill.

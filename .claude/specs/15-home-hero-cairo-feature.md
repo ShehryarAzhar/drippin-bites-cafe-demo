@@ -28,7 +28,7 @@ Replace the holding page at `/` with the first two parts of the real home page: 
 - New images. The hero uses a file already in `public/images/`; the corner decorations are drawn in CSS and inline SVG, not image files. Nothing is copied from `docs/`.
 - `logo-stacked.svg` in the hero. The header's logo is directly above it; a second logo would repeat it.
 - A fourth heading size. The hero headline uses `heading-hero` as it is.
-- Open Graph image, Apple touch icon and `metadataBase` (spec 20). A page-specific `metadata` export: the root layout's default title and description already describe the home page.
+- Open Graph image, Apple touch icon and `metadataBase` (spec 19). A page-specific `metadata` export: the root layout's default title and description already describe the home page.
 - Contact details, opening hours or a delivery promise in the hero (all `"TBD"`; spec 16 owns the TBD-safe section).
 - Editing `data/menu.json`, `types/menu.ts`, the cart or the customiser. Installing packages or adding shadcn components.
 - Future phases from CLAUDE.md section 3: backend, auth, payments, WhatsApp Cloud API, admin dashboard, videos. No ratings, "bestseller" or stock labels.
