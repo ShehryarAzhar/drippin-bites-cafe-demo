@@ -1,9 +1,8 @@
 import { BrandHeading } from "@/components/brand/brand-heading"
 import { GoldRule } from "@/components/brand/gold-rule"
 import { PillLabel } from "@/components/brand/pill-label"
+import { DealCard } from "@/components/menu/deal-card"
 import type { Deal } from "@/types/menu"
-
-import { DealCard } from "./deal-card"
 
 /** The Deals heading and a card for every deal that can be ordered. */
 function DealsSection({ deals }: { deals: Deal[] }) {
